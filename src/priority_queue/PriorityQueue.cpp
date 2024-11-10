@@ -57,6 +57,11 @@ HuffmanNode* PriorityQueue::dequeue() {
     return dequeuedPtr;
 }
 
+void PriorityQueue::enqueue(HuffmanNode* node) {
+    queue.push_back(node);
+    reHeapUp(queue.size() - 1);
+}
+
 void PriorityQueue::constructHuffmanTree() {
     // base case when only one pointer left in queue
     if (queue.size() == 1) {

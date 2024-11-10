@@ -10,6 +10,7 @@
 #include "HuffmanNode.h"
 #include "hash_map/FrequencyHashMap.h"
 #include "priority_queue/PriorityQueue.h"
+#include "FileInformation.h"
 
 class HuffmanTree {
 public:
@@ -20,6 +21,10 @@ private:
     HuffmanNode* root{nullptr};
     std::unordered_map<std::optional<char>, std::string> huffmanEncodingTable{};
     std::string huffmanEncodingString{};
+
+    // file-related data members
+    std::string fileDirectory{};
+    FileInformation fileInformation;
 
     // helper functions
     static void traverseBST(PriorityQueue& queue, const FrequencyHashNode* root);

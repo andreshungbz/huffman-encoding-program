@@ -1,9 +1,10 @@
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 
 #include "huffman_tree/HuffmanTree.h"
 
-HuffmanTree::HuffmanTree(const std::string& path) {
+HuffmanTree::HuffmanTree(const std::string& path) : fileInformation("", "", 0) {
     // open test file in binary mode to read file exactly as is stored
     std::ifstream input{path, std::ios::in | std::ios::binary};
     // handle file open error
@@ -11,6 +12,16 @@ HuffmanTree::HuffmanTree(const std::string& path) {
         std::cout << "File Open Error\n";
         return;
     }
+
+    // populate file-related information
+    std::filesystem::path filePath{path};
+    std::string directory{canonical(filePath.parent_path()).string()};
+    std::string fileName{filePath.stem().string()};
+    std::string fileExtension{filePath.extension().string()};
+    std::size_t fileSize{std::filesystem::file_size(filePath)};
+    // initialize members
+    fileDirectory = directory;
+    fileInformation = FileInformation(fileName, fileExtension, fileSize);
 
     // create frequency hash map with specified number of buckets
     FrequencyHashMap hashMap{10};

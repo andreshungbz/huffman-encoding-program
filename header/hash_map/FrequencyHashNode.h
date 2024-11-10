@@ -3,8 +3,8 @@
 // There are the nodes used for chaining in the Frequency Hash Map. Pointers to the left and right are provided
 // so that a BST can be created.
 
-#ifndef FREQUENCYHASHNODE_H
-#define FREQUENCYHASHNODE_H
+#ifndef FREQUENCY_HASH_NODE_H
+#define FREQUENCY_HASH_NODE_H
 
 
 class FrequencyHashNode {
@@ -17,4 +17,4 @@ public:
 };
 
 
-#endif // FREQUENCYHASHNODE_H
+#endif // FREQUENCY_HASH_NODE_H

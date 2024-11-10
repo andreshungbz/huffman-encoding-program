@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.29)
 project(02_huffman_encoding)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 
 include_directories(${PROJECT_SOURCE_DIR}/header ${PROJECT_SOURCE_DIR}/src)
 

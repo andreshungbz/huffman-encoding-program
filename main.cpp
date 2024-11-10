@@ -3,6 +3,7 @@
 
 #include "hash_map/FrequencyHashMap.h"
 #include "priority_queue/PriorityQueue.h"
+#include "huffman_tree/HuffmanTree.h"
 
 // helper functions
 
@@ -50,6 +51,9 @@ int main() {
 
     // construct Huffman Tree
     queue.constructHuffmanTree();
+
+    // create Huffman Tree class
+    HuffmanTree huffmanTree{queue.getHuffmanTree()};
 
     return 0;
 }

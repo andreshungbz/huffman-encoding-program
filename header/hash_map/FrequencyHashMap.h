@@ -22,10 +22,12 @@
 
 class FrequencyHashMap {
 public:
+    // hash maps are often used as structures for other classes, so it being public is fine
+    std::vector<FrequencyHashNode*> buckets;
+
     explicit FrequencyHashMap(int bucketsNumber) : buckets(bucketsNumber) {} // constructor
     void insertHashNode(char key);
 private:
-    std::vector<FrequencyHashNode*> buckets;
     std::hash<char> hash; // hash object
 };
 

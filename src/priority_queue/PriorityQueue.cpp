@@ -5,20 +5,19 @@
 #include "priority_queue/PriorityQueue.h"
 
 void PriorityQueue::reHeapUp(std::size_t endIndex) {
-    std::size_t parentIndex{getParent(endIndex)};
+    if (endIndex > 0) { // base case is at root node
+        std::size_t parentIndex{getParent(endIndex)};
 
-    // swap and continue reHeapUp as necessary
-    if (queue[parentIndex].weight > queue[endIndex].weight) {
-        std::swap(queue[parentIndex], queue[endIndex]);
-        reHeapUp(parentIndex);
+        // swap and continue reHeapUp as necessary
+        if (queue[parentIndex]->weight > queue[endIndex]->weight) {
+            std::swap(*queue[parentIndex], *queue[endIndex]);
+            reHeapUp(parentIndex);
+        }
     }
 }
 
 void PriorityQueue::enqueue(char key, int weight) {
-    // an appropriate scenario to use emplace_back instead of push_back.
-    // creates the HuffmanNode object directly at the end of the vector.
-    // https://en.cppreference.com/w/cpp/container/vector/emplace_back
-    queue.emplace_back(key, weight);
+    queue.push_back(new HuffmanNode(key, weight));
     reHeapUp(queue.size() - 1);
 }
 
@@ -32,13 +31,13 @@ void PriorityQueue::reHeapDown(std::size_t startIndex, std::size_t endIndex) {
         if (leftChildIndex == endIndex) { // if left child is the last node, set it as the min
             minChildIndex = leftChildIndex;
         } else { // set min child accordingly
-            minChildIndex = queue[rightChildIndex].weight < queue[leftChildIndex].weight
+            minChildIndex = queue[rightChildIndex]->weight < queue[leftChildIndex]->weight
             ? rightChildIndex : leftChildIndex;
         }
 
         // swap and continue reHeapDown as necessary
-        if (queue[startIndex].weight > queue[minChildIndex].weight) {
-            std::swap(queue[startIndex], queue[minChildIndex]);
+        if (queue[startIndex]->weight > queue[minChildIndex]->weight) {
+            std::swap(*queue[startIndex], *queue[minChildIndex]);
             reHeapDown(minChildIndex, endIndex);
         }
     }

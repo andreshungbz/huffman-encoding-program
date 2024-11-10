@@ -1,3 +1,8 @@
+// Frequency Hash Node Header and Implementation
+
+// There are the nodes used for chaining in the Frequency Hash Map. Pointers to the left and right are provided
+// so that a BST can be created.
+
 #ifndef FREQUENCYHASHNODE_H
 #define FREQUENCYHASHNODE_H
 

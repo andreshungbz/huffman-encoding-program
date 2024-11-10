@@ -12,4 +12,6 @@ add_executable(02_huffman_encoding main.cpp
         header/priority_queue/PriorityQueue.h
         header/huffman_tree/HuffmanNode.h
         src/priority_queue/PriorityQueue.cpp
+        header/huffman_tree/HuffmanTree.h
+        src/huffman_tree/HuffmanTree.cpp
 )

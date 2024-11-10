@@ -48,5 +48,8 @@ int main() {
     // populate queue with every key in hash map
     populateQueue(queue, hashMap);
 
+    // construct Huffman Tree
+    queue.constructHuffmanTree();
+
     return 0;
 }

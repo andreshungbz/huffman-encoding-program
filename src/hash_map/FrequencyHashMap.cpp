@@ -1,4 +1,4 @@
-#include "FrequencyHashMap.h"
+#include "./hash_map/FrequencyHashMap.h"
 
 void insertBST(FrequencyHashNode*& root, char key) {
     // where node with key does not exist in the bucket, create new node

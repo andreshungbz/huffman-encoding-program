@@ -1,7 +1,7 @@
 #include <fstream>
 #include <iostream>
 
-#include "FrequencyHashMap.h"
+#include "./hash_map/FrequencyHashMap.h"
 
 int main() {
     // open test file in binary mode to read file exactly as is stored

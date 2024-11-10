@@ -3,7 +3,7 @@
 #include "./hash_map/FrequencyHashMap.h"
 
 // recursive helper function that inserts node in the manner of a BST
-void insertBST(FrequencyHashNode*& root, char key) {
+void insertBST(FrequencyHashNode*& root, const char key) {
     // where node with key does not exist in the bucket, create new node
     if (root == nullptr) {
         FrequencyHashNode* newPtr{new FrequencyHashNode(key)};

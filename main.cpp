@@ -4,6 +4,8 @@
 #include "hash_map/FrequencyHashMap.h"
 #include "priority_queue/PriorityQueue.h"
 
+// helper functions
+
 void traverseBST(PriorityQueue& queue, const FrequencyHashNode* root) {
     // base case
     if (root == nullptr) {
@@ -40,8 +42,10 @@ int main() {
         hashMap.insertHashNode(character);
     }
 
+    // create priority queue
     PriorityQueue queue{};
 
+    // populate queue with every key in hash map
     populateQueue(queue, hashMap);
 
     return 0;

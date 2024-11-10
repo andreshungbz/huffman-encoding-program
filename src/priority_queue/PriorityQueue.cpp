@@ -62,4 +62,15 @@ void PriorityQueue::constructHuffmanTree() {
     if (queue.size() == 1) {
         return;
     }
+
+    // extract the two most minimum nodes from queue
+    HuffmanNode* minimumA{dequeue()};
+    HuffmanNode* minimumB{dequeue()};
+
+    // create a non-leaf HuffmanNode with the combined weights
+    HuffmanNode* newPtr{new HuffmanNode(minimumA->weight + minimumB->weight)};
+    newPtr->left = minimumA;
+    newPtr->right = minimumB;
+
+    // add new HuffmanNode back to queue
 }

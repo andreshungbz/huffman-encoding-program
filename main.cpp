@@ -1,6 +1,8 @@
 #include <fstream>
 #include <iostream>
 
+#include "FrequencyHashMap.h"
+
 int main() {
     // open test file in binary mode to read file exactly as is stored
     std::ifstream input{"../test/input.txt", std::ios::in | std::ios::binary};
@@ -10,10 +12,13 @@ int main() {
         return 1;
     }
 
-    // read every character and print it
+    // create frequency hash map with specified number of buckets
+    FrequencyHashMap hashMap{10};
+
+    // read every character
     char character;
     while (input.get(character)) { // .get() evaluates false after reading invalid character
-        std::cout << character;
+        hashMap.insertHashNode(character);
     }
 
     return 0;

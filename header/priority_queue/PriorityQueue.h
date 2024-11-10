@@ -27,6 +27,7 @@ class PriorityQueue {
 public:
     void enqueue(char key, int weight);
     void dequeue();
+    void constructHuffmanTree(); // post-condition: single pointer in queue representing root of Huffman Tree
 private:
     std::vector<HuffmanNode*> queue{};
 

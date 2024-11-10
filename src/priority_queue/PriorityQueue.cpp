@@ -53,3 +53,10 @@ void PriorityQueue::dequeue() {
     queue.pop_back(); // delete last node
     reHeapDown(0, queue.size() - 1);
 }
+
+void PriorityQueue::constructHuffmanTree() {
+    // base case when only one pointer left in queue
+    if (queue.size() == 1) {
+        return;
+    }
+}

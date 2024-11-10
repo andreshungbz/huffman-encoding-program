@@ -52,7 +52,9 @@ HuffmanNode* PriorityQueue::dequeue() {
     HuffmanNode* dequeuedPtr{queue.front()}; // get dequeued pointer
     queue[0] = queue[queue.size() - 1]; // assign last pointer to root
     queue.pop_back(); // delete last pointer
-    reHeapDown(0, queue.size() - 1);
+
+    std::size_t length{queue.size()}; // check for overflow
+    reHeapDown(0, length == 0 ? 0 : length - 1);
 
     return dequeuedPtr;
 }
@@ -78,4 +80,8 @@ void PriorityQueue::constructHuffmanTree() {
     newPtr->right = minimumB;
 
     // add new HuffmanNode back to queue
+    enqueue(newPtr);
+
+    // recursively continue
+    constructHuffmanTree();
 }

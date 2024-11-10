@@ -29,6 +29,7 @@ public:
     HuffmanNode* dequeue();
     void enqueue(HuffmanNode* node); // overload function for constructHuffmanTree
     void constructHuffmanTree(); // post-condition: single pointer in queue representing root of Huffman Tree
+    [[nodiscard]] HuffmanNode* getHuffmanTree() const { return queue[0]; } // called after construction of Huffman Tree
 private:
     std::vector<HuffmanNode*> queue{};
 

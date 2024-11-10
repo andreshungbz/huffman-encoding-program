@@ -43,15 +43,18 @@ void PriorityQueue::reHeapDown(std::size_t startIndex, std::size_t endIndex) {
     }
 }
 
-void PriorityQueue::dequeue() {
+HuffmanNode* PriorityQueue::dequeue() {
     // check if empty
     if (queue.empty()) {
-        return;
+        return nullptr;
     }
 
-    queue[0] = queue[queue.size() - 1]; // assign last node to root
-    queue.pop_back(); // delete last node
+    HuffmanNode* dequeuedPtr{queue.front()}; // get dequeued pointer
+    queue[0] = queue[queue.size() - 1]; // assign last pointer to root
+    queue.pop_back(); // delete last pointer
     reHeapDown(0, queue.size() - 1);
+
+    return dequeuedPtr;
 }
 
 void PriorityQueue::constructHuffmanTree() {

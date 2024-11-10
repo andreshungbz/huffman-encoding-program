@@ -18,7 +18,6 @@
 #define PRIORITY_QUEUE_H
 
 
-
 #include <vector>
 
 #include "huffman_tree/HuffmanNode.h"
@@ -42,7 +41,6 @@ private:
     void reHeapUp(std::size_t endIndex);
     void reHeapDown(std::size_t startIndex, std::size_t endIndex);
 };
-
 
 
 #endif // PRIORITY_QUEUE_H

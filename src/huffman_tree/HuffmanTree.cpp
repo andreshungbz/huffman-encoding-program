@@ -16,7 +16,8 @@ HuffmanTree::HuffmanTree(const std::string& path) {
     FrequencyHashMap hashMap{10};
     // read every character and insert into frequency hash map
     char character;
-    while (input.get(character)) { // .get() evaluates false after reading invalid character
+    while (input.get(character)) {
+        // .get() evaluates false after reading invalid character
         hashMap.insertHashNode(character);
     }
 

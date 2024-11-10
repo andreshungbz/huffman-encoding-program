@@ -5,7 +5,8 @@
 #include "priority_queue/PriorityQueue.h"
 
 void PriorityQueue::reHeapUp(std::size_t endIndex) {
-    if (endIndex > 0) { // base case is at root node
+    if (endIndex > 0) {
+        // base case is at root node
         std::size_t parentIndex{getParent(endIndex)};
 
         // swap and continue reHeapUp as necessary
@@ -25,14 +26,18 @@ void PriorityQueue::reHeapDown(std::size_t startIndex, std::size_t endIndex) {
     std::size_t leftChildIndex{getLeftChild(startIndex)};
     std::size_t rightChildIndex{getRightChild(startIndex)};
 
-    if (leftChildIndex <= endIndex) { // base case is when left index is past the last vector index
+    if (leftChildIndex <= endIndex) {
+        // base case is when left index is past the last vector index
         std::size_t minChildIndex;
 
-        if (leftChildIndex == endIndex) { // if left child is the last node, set it as the min
+        if (leftChildIndex == endIndex) {
+            // if left child is the last node, set it as the min
             minChildIndex = leftChildIndex;
-        } else { // set min child accordingly
+        } else {
+            // set min child accordingly
             minChildIndex = queue[rightChildIndex]->weight < queue[leftChildIndex]->weight
-            ? rightChildIndex : leftChildIndex;
+                                ? rightChildIndex
+                                : leftChildIndex;
         }
 
         // swap and continue reHeapDown as necessary

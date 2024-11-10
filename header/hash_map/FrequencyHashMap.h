@@ -13,7 +13,6 @@
 #define FREQUENCY_HASHMAP_H
 
 
-
 #include <functional> // std::hash object already provides a rather performant hash function to use
 #include <iostream>
 #include <vector>
@@ -27,10 +26,10 @@ public:
 
     explicit FrequencyHashMap(int bucketsNumber) : buckets(bucketsNumber) {} // constructor
     void insertHashNode(char key);
+
 private:
     std::hash<char> hash; // hash object
 };
-
 
 
 #endif // FREQUENCY_HASHMAP_H

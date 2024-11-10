@@ -11,7 +11,6 @@
 #define HUFFMAN_NODE_H
 
 
-
 #include <optional>
 
 class HuffmanNode {
@@ -24,7 +23,6 @@ public:
     HuffmanNode(char keyValue, int weightValue) : key(keyValue), weight(weightValue) {} // for priority queue
     explicit HuffmanNode(int weightValue) : weight(weightValue) {} // for building Huffman Tree
 };
-
 
 
 #endif // HUFFMAN_NODE_H

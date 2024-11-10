@@ -43,8 +43,11 @@ HuffmanTree::HuffmanTree(const std::string& path) : fileInformation("", "", 0) {
     root = queue.getHuffmanTree();
 
     // generate other structures
-
     generateEncodingTable();
+    generateEncodingString(input);
+
+    // close file
+    input.close();
 }
 
 void HuffmanTree::generateEncodingTable() {
@@ -52,6 +55,18 @@ void HuffmanTree::generateEncodingTable() {
     huffmanEncodingTable.clear();
 
     generateEncodingTableHelper(root, "");
+}
+
+void HuffmanTree::generateEncodingString(std::ifstream& input) {
+    // clear string and move file pointer back to beginning
+    huffmanEncodingString.clear();
+    input.clear(); // check if error state
+    input.seekg(0, std::ios::beg);
+
+    char character;
+    while(input.get(character)) {
+        insertEncodedCharacter(character);
+    }
 }
 
 // helper functions
@@ -96,4 +111,14 @@ void HuffmanTree::generateEncodingTableHelper(const HuffmanNode* root, const std
     // here is where the Huffman Coding algorithm comes into play with 0 going left and 1 going right
     generateEncodingTableHelper(root->left, code + "0");
     generateEncodingTableHelper(root->right, code + "1");
+}
+
+void HuffmanTree::insertEncodedCharacter(const char character) {
+    auto encoding{huffmanEncodingTable.find(character)};
+
+    if (encoding != huffmanEncodingTable.end()) {
+        huffmanEncodingString += encoding->second;
+    } else {
+        std::cout << "Character not found in encoding table.\n";
+    }
 }

@@ -16,6 +16,7 @@ class HuffmanTree {
 public:
     explicit HuffmanTree(const std::string& path);
     void generateEncodingTable();
+    void generateEncodingString(std::ifstream& input);
 
 private:
     HuffmanNode* root{nullptr};
@@ -30,6 +31,7 @@ private:
     static void traverseBST(PriorityQueue& queue, const FrequencyHashNode* root);
     static void populateQueue(PriorityQueue& queue, const FrequencyHashMap& hashMap);
     void generateEncodingTableHelper(const HuffmanNode* root, const std::string& code);
+    void insertEncodedCharacter(char character);
 };
 
 

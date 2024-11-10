@@ -9,10 +9,12 @@
 #include <unordered_map>
 
 #include "HuffmanNode.h"
+#include "hash_map/FrequencyHashMap.h"
+#include "priority_queue/PriorityQueue.h"
 
 class HuffmanTree {
 public:
-    explicit HuffmanTree(HuffmanNode* tree);
+    explicit HuffmanTree(const std::string& path);
     void generateEncodingTable();
 private:
     HuffmanNode* root{nullptr};
@@ -20,7 +22,9 @@ private:
     std::string huffmanEncodingString{};
 
     // helper functions
-    void generateEncodingTableHelper(HuffmanNode* root, const std::string& code);
+    static void traverseBST(PriorityQueue& queue, const FrequencyHashNode* root);
+    static void populateQueue(PriorityQueue& queue, const FrequencyHashMap& hashMap);
+    void generateEncodingTableHelper(const HuffmanNode* root, const std::string& code);
 };
 
 

@@ -9,8 +9,8 @@
 // pointers to FrequencyHashNode are stored. The chaining of each node is implemented as a Binary Search Tree (BST)
 // rather than a standard Linked List. This makes the insertions on the chain O(log base 2 of N).
 
-#ifndef FREQUENCYHASHMAP_H
-#define FREQUENCYHASHMAP_H
+#ifndef FREQUENCY_HASHMAP_H
+#define FREQUENCY_HASHMAP_H
 
 
 
@@ -31,4 +31,4 @@ private:
 
 
 
-#endif // FREQUENCYHASHMAP_H
+#endif // FREQUENCY_HASHMAP_H

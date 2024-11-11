@@ -1,44 +1,8 @@
-// #include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <sys/stat.h>
 
 #include "huffman_tree/HuffmanTree.h"
-
-// POSIX functions
-
-// function to get file size
-std::size_t getFileSize(const std::string& path) {
-    struct stat statBuf{};
-    if (stat(path.c_str(), &statBuf) != 0) {
-        return 0;
-    }
-    return statBuf.st_size;
-}
-
-// function to get directory from path
-std::string getDirectory(const std::string& path) {
-    char absPath[PATH_MAX];
-    if (realpath(path.c_str(), absPath) == nullptr) {
-        return "";
-    }
-    std::string fullPath(absPath);
-    size_t pos = fullPath.find_last_of("/\\");
-    return (std::string::npos == pos) ? "" : fullPath.substr(0, pos);
-}
-
-// function to get file name without extension
-std::string getFileName(const std::string& path) {
-    size_t start = path.find_last_of("/\\") + 1;
-    size_t end = path.find_last_of('.');
-    return path.substr(start, end - start);
-}
-
-// function to get file extension
-std::string getFileExtension(const std::string& path) {
-    size_t pos = path.find_last_of('.');
-    return (std::string::npos == pos) ? "" : path.substr(pos);
-}
+#include "FileUtils.h"
 
 HuffmanTree::HuffmanTree(const std::string& path) : fileInformation("", "", 0) {
     // open test file in binary mode to read file exactly as is stored
@@ -49,14 +13,7 @@ HuffmanTree::HuffmanTree(const std::string& path) : fileInformation("", "", 0) {
         return;
     }
 
-    // populate file-related information using filesystem
-    // std::filesystem::path filePath{path};
-    // std::string directory{canonical(filePath.parent_path()).string()};
-    // std::string fileName{filePath.stem().string()};
-    // std::string fileExtension{filePath.extension().string()};
-    // std::size_t fileSize{std::filesystem::file_size(filePath)};
-
-    // populate file-related information using POSIX functions
+    // get information about file
     std::string directory = getDirectory(path);
     std::string fileName = getFileName(path);
     std::string fileExtension = getFileExtension(path);

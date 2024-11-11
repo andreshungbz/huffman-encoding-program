@@ -15,4 +15,6 @@ add_executable(02_huffman_encoding main.cpp
         header/huffman_tree/HuffmanTree.h
         src/huffman_tree/HuffmanTree.cpp
         header/FileInformation.h
+        header/FileUtils.h
+        src/FileUtils.cpp
 )

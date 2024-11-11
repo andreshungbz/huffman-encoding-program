@@ -9,11 +9,11 @@
 
 // function to get file size
 std::size_t getFileSize(const std::string& path) {
-    struct stat statbuf;
-    if (stat(path.c_str(), &statbuf) != 0) {
+    struct stat statBuf{};
+    if (stat(path.c_str(), &statBuf) != 0) {
         return 0;
     }
-    return statbuf.st_size;
+    return statBuf.st_size;
 }
 
 // function to get directory from path
@@ -30,13 +30,13 @@ std::string getDirectory(const std::string& path) {
 // function to get file name without extension
 std::string getFileName(const std::string& path) {
     size_t start = path.find_last_of("/\\") + 1;
-    size_t end = path.find_last_of(".");
+    size_t end = path.find_last_of('.');
     return path.substr(start, end - start);
 }
 
 // function to get file extension
 std::string getFileExtension(const std::string& path) {
-    size_t pos = path.find_last_of(".");
+    size_t pos = path.find_last_of('.');
     return (std::string::npos == pos) ? "" : path.substr(pos);
 }
 

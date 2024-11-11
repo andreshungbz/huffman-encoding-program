@@ -2,9 +2,9 @@
 
 #if __has_include(<filesystem>)
     #include <filesystem>
-    #define USE_FILESYSTEM 1
-#else
     #define USE_FILESYSTEM 0
+#else
+    #define USE_FILESYSTEM 1
 #endif
 
 #if USE_FILESYSTEM // functions using <filesystem>
@@ -30,6 +30,16 @@ std::string getFileExtension(const std::string& path) {
 
 #else // functions using POSIX
 
+#include <sys/stat.h>
+
+#ifdef _WIN32
+#include <windows.h>
+#include <stdlib.h>
+#else
+#include <climits>
+#include <unistd.h>
+#endif
+
 std::size_t getFileSize(const std::string& path) {
     struct stat statBuf{};
     if (stat(path.c_str(), &statBuf) != 0) {
@@ -40,9 +50,15 @@ std::size_t getFileSize(const std::string& path) {
 
 std::string getDirectory(const std::string& path) {
     char absPath[PATH_MAX];
+#ifdef _WIN32
+    if (_fullpath(absPath, path.c_str(), PATH_MAX) == nullptr) {
+        return "";
+    }
+#else
     if (realpath(path.c_str(), absPath) == nullptr) {
         return "";
     }
+#endif
     std::string fullPath(absPath);
     size_t pos = fullPath.find_last_of("/\\");
     return (std::string::npos == pos) ? "" : fullPath.substr(0, pos);

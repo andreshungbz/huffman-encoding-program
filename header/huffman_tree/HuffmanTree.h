@@ -17,11 +17,13 @@ public:
     explicit HuffmanTree(const std::string& path);
     void generateEncodingTable();
     void generateEncodingString(std::ifstream& input);
+    void generateHuffmanTreeRepresentation();
 
 private:
     HuffmanNode* root{nullptr};
     std::unordered_map<std::optional<char>, std::string> huffmanEncodingTable{};
     std::string huffmanEncodingString{};
+    std::string huffmanTreeRepresentation{};
 
     // file-related data members
     std::string fileDirectory{};

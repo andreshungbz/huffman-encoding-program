@@ -69,6 +69,10 @@ void HuffmanTree::generateEncodingString(std::ifstream& input) {
     }
 }
 
+void HuffmanTree::generateHuffmanTreeRepresentation() {
+
+}
+
 // helper functions
 
 void HuffmanTree::traverseBST(PriorityQueue& queue, const FrequencyHashNode* root) {

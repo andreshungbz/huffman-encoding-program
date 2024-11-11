@@ -18,8 +18,13 @@ std::size_t getFileSize(const std::string& path) {
 
 // function to get directory from path
 std::string getDirectory(const std::string& path) {
-    size_t pos = path.find_last_of("/\\");
-    return (std::string::npos == pos) ? "" : path.substr(0, pos);
+    char absPath[PATH_MAX];
+    if (realpath(path.c_str(), absPath) == nullptr) {
+        return "";
+    }
+    std::string fullPath(absPath);
+    size_t pos = fullPath.find_last_of("/\\");
+    return (std::string::npos == pos) ? "" : fullPath.substr(0, pos);
 }
 
 // function to get file name without extension

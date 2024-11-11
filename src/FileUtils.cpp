@@ -1,8 +1,8 @@
 #include "FileUtils.h"
 
 #if __has_include(<filesystem>)
-#include <filesystem>
-#define USE_FILESYSTEM 1
+    #include <filesystem>
+    #define USE_FILESYSTEM 1
 #else
     #define USE_FILESYSTEM 0
 #endif

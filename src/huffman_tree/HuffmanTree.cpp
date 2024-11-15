@@ -44,6 +44,7 @@ HuffmanTree::HuffmanTree(const std::string& path) : fileInformation("", "", 0, "
     // generate other structures
     generateEncodingTable();
     generateEncodingString(input);
+    generateHuffmanTreeRepresentation();
 
     // close file
     input.close();
@@ -68,7 +69,10 @@ void HuffmanTree::generateEncodingString(std::ifstream& input) {
     }
 }
 
-void HuffmanTree::generateHuffmanTreeRepresentation() {}
+void HuffmanTree::generateHuffmanTreeRepresentation() {
+    huffmanTreeRepresentation.clear();
+    generateHuffmanTreeRepresentationHelper(root);
+}
 
 // helper functions
 
@@ -122,4 +126,36 @@ void HuffmanTree::insertEncodedCharacter(const char character) {
     } else {
         std::cout << "Character not found in encoding table.\n";
     }
+}
+
+void HuffmanTree::generateHuffmanTreeRepresentationHelper(const HuffmanNode* root) {
+    // base case
+    if (root == nullptr) return;
+
+    // preorder traversal is used to record the tree representation
+
+    // if the key has a value, encode 0 and then the 8-bit representation (9 bits total)
+    if (root->key.has_value()) {
+        huffmanTreeRepresentation += '0';
+
+        // get the character value and loop through every bit from left to right.
+        // for example, 'h' has the ASCII representation of '01101000'.
+        // loop down from 7 to 0 inclusive, using the right-shift operator (>>) based on index
+        // and using the bitwise AND operator (&) to evaluate the moved bit.
+
+        // https://www.geeksforgeeks.org/cpp-bitwise-operators/
+
+        char character{root->key.value()};
+        for (int i{7}; i >= 0; --i) {
+            bool result{static_cast<bool>((character >> i) & 1)};
+            huffmanTreeRepresentation += result ? '1' : '0';
+        }
+    } else {
+        // leaf node
+        huffmanTreeRepresentation += '1';
+    }
+
+    // recursively continue
+    generateHuffmanTreeRepresentationHelper(root->left);
+    generateHuffmanTreeRepresentationHelper(root->right);
 }

@@ -33,6 +33,7 @@ private:
     static void populateQueue(PriorityQueue& queue, const FrequencyHashMap& hashMap);
     void generateEncodingTableHelper(const HuffmanNode* root, const std::string& code);
     void insertEncodedCharacter(char character);
+    void generateHuffmanTreeRepresentationHelper(const HuffmanNode* root);
 };
 
 

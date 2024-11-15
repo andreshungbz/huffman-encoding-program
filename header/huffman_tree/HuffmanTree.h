@@ -18,12 +18,14 @@ public:
     void generateEncodingTable();
     void generateEncodingString(std::ifstream& input);
     void generateHuffmanTreeRepresentation();
+    void generateFileInfoEncoding();
 
 private:
     HuffmanNode* huffmanTreeRoot{nullptr};
     std::unordered_map<std::optional<char>, std::string> huffmanEncodingTable{};
     std::string huffmanEncodingString{};
     std::string huffmanTreeRepresentation{};
+    std::string huffmanFileInfoEncoding{};
 
     // file-related data members
     FileInformation fileInformation;

@@ -45,6 +45,7 @@ HuffmanTree::HuffmanTree(const std::string& path) : fileInformation("", "", 0, "
     generateEncodingTable();
     generateEncodingString(input);
     generateHuffmanTreeRepresentation();
+    generateFileInfoEncoding();
 
     // close file
     input.close();
@@ -72,6 +73,22 @@ void HuffmanTree::generateEncodingString(std::ifstream& input) {
 void HuffmanTree::generateHuffmanTreeRepresentation() {
     huffmanTreeRepresentation.clear();
     generateHuffmanTreeRepresentationHelper(huffmanTreeRoot);
+}
+
+void HuffmanTree::generateFileInfoEncoding() {
+    for (char c : fileInformation.fileName) {
+        for (int i{7}; i >= 0; --i) {
+            bool result{static_cast<bool>((c >> i) & 1)};
+            huffmanFileInfoEncoding += result ? '1' : '0';
+        }
+    }
+
+    for (char c : fileInformation.fileExtension) {
+        for (int i{7}; i >= 0; --i) {
+            bool result{static_cast<bool>((c >> i) & 1)};
+            huffmanFileInfoEncoding += result ? '1' : '0';
+        }
+    }
 }
 
 // helper functions

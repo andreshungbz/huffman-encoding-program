@@ -4,7 +4,7 @@
 #include "huffman_tree/HuffmanTree.h"
 #include "FileUtils.h"
 
-HuffmanTree::HuffmanTree(const std::string& path) : fileInformation("", "", 0) {
+HuffmanTree::HuffmanTree(const std::string& path) : fileInformation("", "", 0, "") {
     // open test file in binary mode to read file exactly as is stored
     std::ifstream input{path, std::ios::in | std::ios::binary};
     // handle file open error
@@ -20,8 +20,7 @@ HuffmanTree::HuffmanTree(const std::string& path) : fileInformation("", "", 0) {
     std::size_t fileSize = getFileSize(path);
 
     // initialize members
-    fileDirectory = directory;
-    fileInformation = FileInformation(fileName, fileExtension, fileSize);
+    fileInformation = FileInformation(fileName, fileExtension, fileSize, directory);
 
     // create frequency hash map with specified number of buckets
     FrequencyHashMap hashMap{10};
@@ -64,14 +63,12 @@ void HuffmanTree::generateEncodingString(std::ifstream& input) {
     input.seekg(0, std::ios::beg);
 
     char character;
-    while(input.get(character)) {
+    while (input.get(character)) {
         insertEncodedCharacter(character);
     }
 }
 
-void HuffmanTree::generateHuffmanTreeRepresentation() {
-
-}
+void HuffmanTree::generateHuffmanTreeRepresentation() {}
 
 // helper functions
 

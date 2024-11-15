@@ -26,7 +26,6 @@ private:
     std::string huffmanTreeRepresentation{};
 
     // file-related data members
-    std::string fileDirectory{};
     FileInformation fileInformation;
 
     // helper functions

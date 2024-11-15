@@ -11,6 +11,7 @@
 #include "hash_map/FrequencyHashMap.h"
 #include "priority_queue/PriorityQueue.h"
 #include "FileInformation.h"
+#include "HuffmanFileHeader.h"
 
 class HuffmanTree {
 public:
@@ -19,6 +20,7 @@ public:
     void generateEncodingString(std::ifstream& input);
     void generateHuffmanTreeRepresentation();
     void generateFileInfoEncoding();
+    void generateHuffmanFileHeader();
 
 private:
     HuffmanNode* huffmanTreeRoot{nullptr};
@@ -26,9 +28,10 @@ private:
     std::string huffmanEncodingString{};
     std::string huffmanTreeRepresentation{};
     std::string huffmanFileInfoEncoding{};
+    HuffmanFileHeader huffmanFileHeader{0, 0, 0};
 
     // file-related data members
-    FileInformation fileInformation;
+    FileInformation fileInformation{"", "", 0, ""};
 
     // helper functions
     static void traverseBST(PriorityQueue& queue, const FrequencyHashNode* root);

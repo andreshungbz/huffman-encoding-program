@@ -4,7 +4,7 @@
 #include "huffman_tree/HuffmanTree.h"
 #include "FileUtils.h"
 
-HuffmanTree::HuffmanTree(const std::string& path) : fileInformation("", "", 0, "") {
+HuffmanTree::HuffmanTree(const std::string& path) {
     // open test file in binary mode to read file exactly as is stored
     std::ifstream input{path, std::ios::in | std::ios::binary};
     // handle file open error
@@ -46,6 +46,7 @@ HuffmanTree::HuffmanTree(const std::string& path) : fileInformation("", "", 0, "
     generateEncodingString(input);
     generateHuffmanTreeRepresentation();
     generateFileInfoEncoding();
+    generateHuffmanFileHeader();
 
     // close file
     input.close();
@@ -89,6 +90,14 @@ void HuffmanTree::generateFileInfoEncoding() {
             huffmanFileInfoEncoding += result ? '1' : '0';
         }
     }
+}
+
+void HuffmanTree::generateHuffmanFileHeader() {
+    uint32_t infoLength{static_cast<uint32_t>(huffmanFileInfoEncoding.length())};
+    uint32_t treeLength{static_cast<uint32_t>(huffmanTreeRepresentation.length())};
+    uint32_t encodingLength{static_cast<uint32_t>(huffmanEncodingString.length())};
+
+    huffmanFileHeader = HuffmanFileHeader{infoLength, treeLength, encodingLength};
 }
 
 // helper functions

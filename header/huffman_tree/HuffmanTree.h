@@ -20,7 +20,7 @@ public:
     void generateHuffmanTreeRepresentation();
 
 private:
-    HuffmanNode* root{nullptr};
+    HuffmanNode* huffmanTreeRoot{nullptr};
     std::unordered_map<std::optional<char>, std::string> huffmanEncodingTable{};
     std::string huffmanEncodingString{};
     std::string huffmanTreeRepresentation{};

@@ -39,7 +39,7 @@ HuffmanTree::HuffmanTree(const std::string& path) : fileInformation("", "", 0, "
     // construct Huffman Tree
     queue.constructHuffmanTree();
     // assign constructed Huffman Tree to this object's root
-    root = queue.getHuffmanTree();
+    huffmanTreeRoot = queue.getHuffmanTree();
 
     // generate other structures
     generateEncodingTable();
@@ -54,7 +54,7 @@ void HuffmanTree::generateEncodingTable() {
     // clear encoding table
     huffmanEncodingTable.clear();
 
-    generateEncodingTableHelper(root, "");
+    generateEncodingTableHelper(huffmanTreeRoot, "");
 }
 
 void HuffmanTree::generateEncodingString(std::ifstream& input) {
@@ -71,7 +71,7 @@ void HuffmanTree::generateEncodingString(std::ifstream& input) {
 
 void HuffmanTree::generateHuffmanTreeRepresentation() {
     huffmanTreeRepresentation.clear();
-    generateHuffmanTreeRepresentationHelper(root);
+    generateHuffmanTreeRepresentationHelper(huffmanTreeRoot);
 }
 
 // helper functions

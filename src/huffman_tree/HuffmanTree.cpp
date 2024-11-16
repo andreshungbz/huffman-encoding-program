@@ -100,6 +100,88 @@ void HuffmanTree::generateHuffmanFileHeader() {
     huffmanFileHeader = HuffmanFileHeader{infoLength, treeLength, encodingLength};
 }
 
+void HuffmanTree::compress() {
+    std::string compressedFilePath{fileInformation.fileDirectory + "/" + fileInformation.fileName + ".hzip"};
+    std::ofstream output{compressedFilePath,std::ios::out | std::ios::binary};
+
+    if (!output) {
+        std::cout << "File Write Error\n";
+        return;
+    }
+
+    // read on little-endian format later
+    // file named input.txt with content "happy_hip_hop" gives the following output in raw bits for the header
+    // 01001000 00000000 00000000 00000000 for 72
+    // 01000101 00000000 00000000 00000000 for 69
+    // 00100010 00000000 00000000 00000000 for 34
+
+    // write Huffman File Header (always 12 bytes)
+    output.write(reinterpret_cast<const char*>(&huffmanFileHeader), sizeof(HuffmanFileHeader));
+
+    // write Huffman File Information (always in byte (8-bit) chunks)
+    // the file name with extension will be visible in a hex editor
+
+    for (std::size_t i{0}; i < huffmanFileInfoEncoding.length(); i += 8) {
+        int byte{0};
+        // construct the 8-bit byte chunk by setting the appropriate bit
+        // this time use the left shift operator (<<) to set the appropriate bit which gets set to byte
+        // via the bitwise OR operator (|)
+        for (int j{0}; j < 8; ++j) {
+            if (huffmanFileInfoEncoding[i + j] == '1') {
+                // integer 1 represented as 00000001
+                byte |= (1 << (7 - j));
+            }
+        }
+
+        // write byte chunk into file
+        char charByte{static_cast<char>(byte)};
+        output.write(&charByte, 1);
+    }
+
+    // write Huffman Tree Representation (may have incomplete byte so pad the end with 0s)
+    // for happy_hip_hop whose tree representation is 69 bits, padding count is 3
+
+    std::string paddedTreeString{huffmanTreeRepresentation}; // copy over string
+    // the calculation in parentheses gives us number of 0s to pad; extra % 8 ensures that
+    // if the string is already divisible by 8, then the padCount becomes 0
+    std::size_t padCountTree{(8 - (huffmanTreeRepresentation.length() % 8)) % 8};
+    paddedTreeString.append(padCountTree, '0');
+
+    // follow previous loop to write byte chunks
+    for (std::size_t i{0}; i < paddedTreeString.length(); i += 8) {
+        int byte{0};
+        for (int j{0}; j < 8; ++j) {
+            if (paddedTreeString[i + j] == '1') {
+                byte |= (1 << (7 - j));
+            }
+        }
+
+        char charByte{static_cast<char>(byte)};
+        output.write(&charByte, 1);
+    }
+
+    // write Huffman Encoding (may have incomplete byte so pad the end with 0s)
+    // follows same algorithm as writing huffmanTreeRepresentation
+    // for happy_hip_hop whose encoding string is 34 bits, padding count is 6
+
+    std::string paddedEncodingString{huffmanEncodingString};
+    std::size_t padCountEncoding{(8 - (huffmanEncodingString.length() % 8)) % 8};
+    paddedEncodingString.append(padCountEncoding, '0');
+
+    // follow previous loop to write byte chunks
+    for (std::size_t i{0}; i < paddedEncodingString.length(); i += 8) {
+        int byte{0};
+        for (int j{0}; j < 8; ++j) {
+            if (paddedEncodingString[i + j] == '1') {
+                byte |= (1 << (7 - j));
+            }
+        }
+
+        char charByte{static_cast<char>(byte)};
+        output.write(&charByte, 1);
+    }
+}
+
 // helper functions
 
 void HuffmanTree::traverseBST(PriorityQueue& queue, const FrequencyHashNode* root) {

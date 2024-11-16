@@ -20,5 +20,7 @@ int main() {
     // create Huffman Tree
     HuffmanTree huffmanTree{path};
 
+    huffmanTree.compress();
+
     return 0;
 }

@@ -22,6 +22,8 @@ public:
     void generateFileInfoEncoding();
     void generateHuffmanFileHeader();
 
+    void compress();
+
 private:
     HuffmanNode* huffmanTreeRoot{nullptr};
     std::unordered_map<std::optional<char>, std::string> huffmanEncodingTable{};

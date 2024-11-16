@@ -5,16 +5,16 @@
 #include <cstdint>
 #include <fstream>
 
-#include "huffman_tree/components/FileInformation.h"
 #include "huffman_tree/HuffmanNode.h"
+#include "huffman_tree/components/HuffmanHeader.h"
 
-// compress helper function
+// compress helper functions
 void writeSection(std::ofstream& output, const std::string& section);
+void writeCompressedFile(const std::string& destination, const HuffmanHeader& header, const std::string& information, const std::string& representation, const std::string& encoding);
+
 // decompress helper functions
 void readSection(std::ifstream& input, std::string& section, uint32_t size);
-void instantiateHuffmanFileInformation(FileInformation& information, const std::string& infoEncoding);
-HuffmanNode* instantiateHuffmanTree(const std::string& representation, int& position);
-void writeDecompressedFile(const std::string& path, HuffmanNode* root, const std::string& encodingString);
+void writeDecompressedFile(const std::string& destination, HuffmanNode* root, const std::string& encodingString);
 
 
 #endif // COMPRESSION_UTILS_H

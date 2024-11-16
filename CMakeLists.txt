@@ -25,4 +25,6 @@ add_executable(02_huffman_encoding main.cpp
         src/utils/generate/generate_utils.cpp
         src/utils/compression/compression_utils.h
         src/utils/compression/compression_utils.cpp
+        src/utils/instantiate/instantiate_utils.h
+        src/utils/instantiate/instantiate_utils.cpp
 )

@@ -19,6 +19,7 @@ public:
     void generate(std::ifstream& input, const std::string& source);
     void compress() const;
     void decompress(const std::string& source);
+    void instantiate();
 
 private:
     HuffmanNode* huffmanTreeRoot{nullptr};

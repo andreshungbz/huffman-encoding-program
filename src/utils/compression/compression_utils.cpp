@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-// compress helper function
+// compress helper functions
 
 void writeSection(std::ofstream& output, const std::string& section) {
     std::string string{section}; // copy over section string
@@ -30,6 +30,37 @@ void writeSection(std::ofstream& output, const std::string& section) {
     }
 }
 
+void writeCompressedFile(const std::string& destination, const HuffmanHeader& header, const std::string& information, const std::string& representation, const std::string& encoding) {
+    std::ofstream output{destination,std::ios::out | std::ios::binary};
+
+    if (!output) {
+        std::cout << "File Write Error\n";
+        return;
+    }
+
+    // read on little-endian format later
+    // file named input.txt with content "happy_hip_hop" gives the following output in raw bits for the header
+    // 01001000 00000000 00000000 00000000 for 72
+    // 01000101 00000000 00000000 00000000 for 69
+    // 00100010 00000000 00000000 00000000 for 34
+
+    // write Huffman File Header (always 12 bytes)
+    output.write(reinterpret_cast<const char*>(&header), sizeof(HuffmanHeader));
+
+    // write Huffman File Information (always in byte (8-bit) chunks)
+    writeSection(output, information);
+
+    // write Huffman Tree Representation (may have incomplete byte so pad the end with 0s)
+    // for happy_hip_hop whose tree representation is 69 bits, padding count is 3
+    writeSection(output, representation);
+
+    // write Huffman Encoding (may have incomplete byte so pad the end with 0s)
+    // for happy_hip_hop whose encoding string is 34 bits, padding count is 6
+    writeSection(output, encoding);
+
+    output.close();
+}
+
 // decompress helper functions
 
 void readSection(std::ifstream& input, std::string& section, uint32_t size) {
@@ -49,65 +80,8 @@ void readSection(std::ifstream& input, std::string& section, uint32_t size) {
     }
 }
 
-void instantiateHuffmanFileInformation(FileInformation& information, const std::string& infoEncoding) {
-    // use huffmanFileInfoEncoding to instantiate fileInformation's fileName and fileExtension
-
-    bool isFileName{true};
-    for (size_t i = 0; i < infoEncoding.length(); i += 8) {
-        // read byte
-        int byte{0};
-        for (size_t j = 0; j < 8; j++) {
-            if (infoEncoding[i + j] == '1') {
-                byte |= (1 << (7 - j));
-            }
-        }
-
-        // check character
-        char character{static_cast<char>(byte)};
-
-        // when period is reached, change condition status so that fileExtension gets appended instead
-        if (character == '.') {
-            isFileName = false;
-        }
-
-        // append to fileName and fileExtension accordingly
-        if (isFileName) {
-            information.fileName += character;
-        } else {
-            information.fileExtension += character;
-        }
-    }
-}
-
-HuffmanNode* instantiateHuffmanTree(const std::string& representation, int& position) {
-    if (position >= representation.length()) {
-        return nullptr;
-    }
-
-    if (representation[position] == '0') {
-        // leaf node - next 8 bits represent the character
-        ++position;
-        int byte{0};
-        for (int i{0}; i < 8; ++i) {
-            if (representation[position + i] == '1') {
-                byte |= (1 << (7 - i));
-            }
-        }
-        position += 8;
-        return new HuffmanNode(static_cast<char>(byte), 0);  // Weight doesn't matter for decompression
-    }
-
-    // internal node
-    ++position;
-    auto* node = new HuffmanNode(0);  // Create internal node
-    node->left = instantiateHuffmanTree(representation, position);
-    node->right = instantiateHuffmanTree(representation, position);
-
-    return node;
-}
-
-void writeDecompressedFile(const std::string& path, HuffmanNode* root, const std::string& encodingString) {
-    std::ofstream output(path, std::ios::out | std::ios::binary);
+void writeDecompressedFile(const std::string& destination, HuffmanNode* root, const std::string& encodingString) {
+    std::ofstream output(destination, std::ios::out | std::ios::binary);
 
     if (!output) {
         std::cout << "Write Decompressed File Error\n";

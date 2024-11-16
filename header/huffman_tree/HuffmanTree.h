@@ -48,10 +48,10 @@ private:
     static void writeSection(std::ofstream& output, const std::string& section);
 
     // decompress helper functions
-    void readHuffmanFileInfo(std::ifstream& input);
-    void readHuffmanTreeRepresentation(std::ifstream& input);
-    void readHuffmanEncoding(std::ifstream& input);
-    static HuffmanNode* reconstructHuffmanTree(const std::string& representation, int& position);
+    static void readSection(std::ifstream& input, std::string& section, uint32_t size);
+    void instantiateHuffmanFileInformation();
+    static HuffmanNode* instantiateHuffmanTree(const std::string& representation, int& position);
+
     void writeDecompressedFile(const std::string& path);
 };
 

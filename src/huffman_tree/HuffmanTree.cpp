@@ -146,15 +146,16 @@ void HuffmanTree::decompress(const std::string& path) {
     input.read(reinterpret_cast<char*>(&huffmanFileHeader), sizeof(HuffmanFileHeader));
 
     // read and instantiate Huffman File Info Encoding along with fileInformation.fileName and fileInformation.fileExtension
-    readHuffmanFileInfo(input);
+    readSection(input, huffmanFileInfoEncoding, huffmanFileHeader.fileInfoLength);
+    instantiateHuffmanFileInformation();
 
     // read and instantiate Huffman Tree Representation and build huffmanTreeRoot
-    readHuffmanTreeRepresentation(input);
+    readSection(input, huffmanTreeRepresentation, huffmanFileHeader.treeRepresentationLength);
     int position{0};
-    huffmanTreeRoot = reconstructHuffmanTree(huffmanTreeRepresentation, position);
+    huffmanTreeRoot = instantiateHuffmanTree(huffmanTreeRepresentation, position);
 
     // read and instantiate Huffman Encoding String
-    readHuffmanEncoding(input);
+    readSection(input, huffmanEncodingString, huffmanFileHeader.huffmanEncodingLength);
 
     // construct original file path
     std::string directory = getDirectory(path);
@@ -282,22 +283,24 @@ void HuffmanTree::writeSection(std::ofstream& output, const std::string& section
 
 // decompress helper functions
 
-void HuffmanTree::readHuffmanFileInfo(std::ifstream& input) {
-    huffmanFileInfoEncoding.clear();
+void HuffmanTree::readSection(std::ifstream& input, std::string& section, uint32_t size) {
+    section.clear();
 
-    // read the file info section of the input and instantiate huffmanFileInfoEncoding
-
-    int bytesCount{(static_cast<int>(huffmanFileHeader.fileInfoLength) + 7) / 8}; // main counter that will read all bytes
-    for (int i{0}; i < bytesCount; ++i) {
+    // read the section and instantiate the appropriate data member
+    int bytesCount{(static_cast<int>(size) + 7) / 8};
+    for (int i{0}; i < bytesCount; ++i) { // this ensures file pointer ends after the padding
         char byte{};
         input.read(&byte, 1);
 
-        // because the File Info Encoding is guaranteed to be in byte chunks, it is safe to append all 8 bits
         for (int j{0}; j < 8; ++j) {
-            huffmanFileInfoEncoding += (byte & (1 << 7 - j)) ? '1' : '0';
+            if (i * 8 + j < size) { // don't count padding bits
+                section += (byte & (1 << 7 - j)) ? '1' : '0';
+            }
         }
     }
+}
 
+void HuffmanTree::instantiateHuffmanFileInformation() {
     // use huffmanFileInfoEncoding to instantiate fileInformation's fileName and fileExtension
 
     bool isFileName{true};
@@ -327,44 +330,7 @@ void HuffmanTree::readHuffmanFileInfo(std::ifstream& input) {
     }
 }
 
-void HuffmanTree::readHuffmanTreeRepresentation(std::ifstream& input) {
-    huffmanTreeRepresentation.clear();
-
-    // read the tree representation section of the input and instantiate huffmanTreeRepresentation
-
-    int bytesCount{(static_cast<int>(huffmanFileHeader.treeRepresentationLength) + 7) / 8};
-    for (int i{0}; i < bytesCount; ++i) { // this ensures file pointer ends after the padding
-        char byte{};
-        input.read(&byte, 1);
-
-        for (int j{0}; j < 8; ++j) {
-            if (i * 8 + j < huffmanFileHeader.treeRepresentationLength) { // don't count padding bits
-                huffmanTreeRepresentation += (byte & (1 << 7 - j)) ? '1' : '0';
-            }
-        }
-    }
-}
-
-void HuffmanTree::readHuffmanEncoding(std::ifstream& input) {
-    huffmanEncodingString.clear();
-
-    // read the huffman encoding section of the input and instantiate huffmanEncodingString
-
-    int bytesCount{(static_cast<int>(huffmanFileHeader.huffmanEncodingLength) + 7) / 8};
-    for (int i{0}; i < bytesCount; ++i) { // this ensures file pointer ends after the padding
-        char byte{};
-        input.read(&byte, 1);
-
-        for (int j{0}; j < 8; ++j) {
-            if (i * 8 + j < huffmanFileHeader.huffmanEncodingLength) { // don't count padding bits
-                huffmanEncodingString += (byte & (1 << 7 - j)) ? '1' : '0';
-            }
-        }
-    }
-}
-
-
-HuffmanNode* HuffmanTree::reconstructHuffmanTree(const std::string& representation, int& position) {
+HuffmanNode* HuffmanTree::instantiateHuffmanTree(const std::string& representation, int& position) {
     if (position >= representation.length()) {
         return nullptr;
     }
@@ -385,8 +351,8 @@ HuffmanNode* HuffmanTree::reconstructHuffmanTree(const std::string& representati
     // internal node
     ++position;
     auto* node = new HuffmanNode(0);  // Create internal node
-    node->left = reconstructHuffmanTree(representation, position);
-    node->right = reconstructHuffmanTree(representation, position);
+    node->left = instantiateHuffmanTree(representation, position);
+    node->right = instantiateHuffmanTree(representation, position);
 
     return node;
 }

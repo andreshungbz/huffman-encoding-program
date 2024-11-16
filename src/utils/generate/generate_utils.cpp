@@ -33,7 +33,7 @@ void generateEncodingTableHelper(std::unordered_map<std::optional<char>, std::st
     generateEncodingTableHelper(encodingTable, root->right, code + "1");
 }
 
-void generateEncodingString(std::ifstream& input, const std::unordered_map<std::optional<char>, std::string>& encodingTable, std::string& encodingString) {
+void generateHuffmanCode(std::ifstream& input, const std::unordered_map<std::optional<char>, std::string>& encodingTable, std::string& encodingString) {
     // clear string and move file pointer back to beginning
     encodingString.clear();
     input.clear(); // check if error state
@@ -92,7 +92,7 @@ void generateHuffmanTreeRepresentationHelper(std::string& representation, const 
     generateHuffmanTreeRepresentationHelper(representation, root->right);
 }
 
-void generateFileInfoEncoding(FileInformation& information, std::string& infoEncoding) {
+void generateFileInfoCode(FileInformation& information, std::string& infoEncoding) {
     infoEncoding.clear();
 
     for (char c : information.fileName) {
@@ -110,7 +110,7 @@ void generateFileInfoEncoding(FileInformation& information, std::string& infoEnc
     }
 }
 
-void generateHuffmanFileHeader(HuffmanHeader& header, std::size_t iLength, std::size_t tLength, std::size_t eLength) {
+void generateHuffmanHeader(HuffmanHeader& header, std::size_t iLength, std::size_t tLength, std::size_t eLength) {
     header.infoLength = static_cast<uint32_t>(iLength);
     header.treeLength = static_cast<uint32_t>(tLength);
     header.encodingLength = static_cast<uint32_t>(eLength);

@@ -1,5 +1,11 @@
 // https://web.stanford.edu/class/archive/cs/cs106b/cs106b.1234/resources/huffman.html
 
+// read on little-endian format later for 32-bit unsigned integers
+// file named input.txt with content "happy_hip_hop" gives the following output in raw bits for the header
+// 01001000 00000000 00000000 00000000 for 72
+// 01000101 00000000 00000000 00000000 for 69
+// 00100010 00000000 00000000 00000000 for 34
+
 #include <string>
 
 #include "huffman_tree/HuffmanTree.h"

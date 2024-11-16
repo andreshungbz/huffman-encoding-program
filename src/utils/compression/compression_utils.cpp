@@ -38,25 +38,11 @@ void writeCompressedFile(const std::string& destination, const HuffmanHeader& he
         return;
     }
 
-    // read on little-endian format later
-    // file named input.txt with content "happy_hip_hop" gives the following output in raw bits for the header
-    // 01001000 00000000 00000000 00000000 for 72
-    // 01000101 00000000 00000000 00000000 for 69
-    // 00100010 00000000 00000000 00000000 for 34
-
-    // write Huffman File Header (always 12 bytes)
-    output.write(reinterpret_cast<const char*>(&header), sizeof(HuffmanHeader));
-
-    // write Huffman File Information (always in byte (8-bit) chunks)
-    writeSection(output, information);
-
-    // write Huffman Tree Representation (may have incomplete byte so pad the end with 0s)
-    // for happy_hip_hop whose tree representation is 69 bits, padding count is 3
-    writeSection(output, representation);
-
-    // write Huffman Encoding (may have incomplete byte so pad the end with 0s)
-    // for happy_hip_hop whose encoding string is 34 bits, padding count is 6
-    writeSection(output, encoding);
+    // write to file each section
+    output.write(reinterpret_cast<const char*>(&header), sizeof(HuffmanHeader)); // always 12 bytes
+    writeSection(output, information); // always in byte chunks
+    writeSection(output, representation); // may have padding at the end
+    writeSection(output, encoding); // may have padding at the end
 
     output.close();
 }

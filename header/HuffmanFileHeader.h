@@ -9,13 +9,13 @@
 class HuffmanFileHeader {
 public:
     // constructor
-    HuffmanFileHeader(uint32_t infoLength, uint32_t treeLength, uint32_t encodingLength)
-        : fileInfoLength(infoLength), treeRepresentationLength(treeLength), huffmanEncodingLength(encodingLength) {}
+    HuffmanFileHeader(uint32_t iLength, uint32_t tLength, uint32_t eLength)
+        : infoLength(iLength), treeLength(tLength), encodingLength(eLength) {}
 
     // data members
-    uint32_t fileInfoLength{};
-    uint32_t treeRepresentationLength{};
-    uint32_t huffmanEncodingLength{};
+    uint32_t infoLength{};
+    uint32_t treeLength{};
+    uint32_t encodingLength{};
 };
 
 

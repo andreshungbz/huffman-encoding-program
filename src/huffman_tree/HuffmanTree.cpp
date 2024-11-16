@@ -146,16 +146,16 @@ void HuffmanTree::decompress(const std::string& path) {
     input.read(reinterpret_cast<char*>(&huffmanFileHeader), sizeof(HuffmanFileHeader));
 
     // read and instantiate Huffman File Info Encoding along with fileInformation.fileName and fileInformation.fileExtension
-    readSection(input, huffmanFileInfoEncoding, huffmanFileHeader.fileInfoLength);
+    readSection(input, huffmanFileInfoEncoding, huffmanFileHeader.infoLength);
     instantiateHuffmanFileInformation();
 
     // read and instantiate Huffman Tree Representation and build huffmanTreeRoot
-    readSection(input, huffmanTreeRepresentation, huffmanFileHeader.treeRepresentationLength);
+    readSection(input, huffmanTreeRepresentation, huffmanFileHeader.treeLength);
     int position{0};
     huffmanTreeRoot = instantiateHuffmanTree(huffmanTreeRepresentation, position);
 
     // read and instantiate Huffman Encoding String
-    readSection(input, huffmanEncodingString, huffmanFileHeader.huffmanEncodingLength);
+    readSection(input, huffmanEncodingString, huffmanFileHeader.encodingLength);
 
     // construct original file path
     std::string directory = getDirectory(path);

@@ -14,21 +14,22 @@
 
 
 #include <functional> // std::hash object already provides a rather performant hash function to use
-#include <iostream>
+#include <fstream>
 #include <vector>
 
 #include "FrequencyHashNode.h"
 
 class FrequencyHashMap {
 public:
-    // hash maps are often used as structures for other classes, so it being public is fine
-    std::vector<FrequencyHashNode*> buckets;
-
-    explicit FrequencyHashMap(int bucketsNumber) : buckets(bucketsNumber) {} // constructor
-    void insertHashNode(char key);
+    FrequencyHashMap(std::ifstream& input, int bucketsCount); // constructor
+    std::vector<FrequencyHashNode*> buckets; // public data member is fine
 
 private:
     std::hash<char> hash; // hash object
+
+    // helper functions
+    void insertHashNode(char key);
+    static void insertBST(FrequencyHashNode*& root, char key);
 };
 
 

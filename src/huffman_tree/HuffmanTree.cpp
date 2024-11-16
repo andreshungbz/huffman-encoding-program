@@ -27,13 +27,7 @@ void HuffmanTree::generate(std::ifstream& input, const std::string& path) {
     fileInformation = FileInformation{fileName, fileExtension, fileSize, directory};
 
     // create frequency hash map with specified number of buckets
-    FrequencyHashMap hashMap{10};
-    // read every character and insert into frequency hash map
-    char character;
-    while (input.get(character)) {
-        // .get() evaluates false after reading invalid character
-        hashMap.insertHashNode(character);
-    }
+    FrequencyHashMap hashMap{input, 10};
 
     // create priority queue
     PriorityQueue queue{};

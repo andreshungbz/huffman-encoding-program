@@ -9,11 +9,13 @@
 
 class FrequencyHashNode {
 public:
+    explicit FrequencyHashNode(char value) : key(value) {} // constructor
+
+    // public data members are fine
     char key{}; // un-hashed key for comparisons
     int frequency{1};
     FrequencyHashNode* left{nullptr};
     FrequencyHashNode* right{nullptr};
-    explicit FrequencyHashNode(char value) : key(value) {} // constructor
 };
 
 

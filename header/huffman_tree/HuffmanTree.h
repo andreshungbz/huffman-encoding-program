@@ -54,6 +54,7 @@ private:
     void readHuffmanTreeRepresentation(std::ifstream& input);
     void readHuffmanEncoding(std::ifstream& input);
     static HuffmanNode* reconstructHuffmanTree(const std::string& representation, int& position);
+    void writeDecompressedFile(const std::string& path);
 };
 
 

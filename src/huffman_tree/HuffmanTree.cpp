@@ -142,9 +142,6 @@ void HuffmanTree::decompress(const std::string& path) {
         return;
     }
 
-    // get file directory
-    std::string directory = getDirectory(path);
-
     // read and instantiate Huffman File Header
     input.read(reinterpret_cast<char*>(&huffmanFileHeader), sizeof(HuffmanFileHeader));
 
@@ -158,6 +155,15 @@ void HuffmanTree::decompress(const std::string& path) {
 
     // read and instantiate Huffman Encoding String
     readHuffmanEncoding(input);
+
+    // construct original file path
+    std::string directory = getDirectory(path);
+    std::string decompressedFilePath = directory + '/' + fileInformation.fileName + "-decompressed" + fileInformation.fileExtension;
+
+    // write decompressed file
+    writeDecompressedFile(decompressedFilePath);
+
+    input.close();
 }
 
 // helper functions
@@ -426,4 +432,31 @@ HuffmanNode* HuffmanTree::reconstructHuffmanTree(const std::string& representati
     node->right = reconstructHuffmanTree(representation, position);
 
     return node;
+}
+
+void HuffmanTree::writeDecompressedFile(const std::string& path) {
+    std::ofstream output(path, std::ios::out | std::ios::binary);
+
+    if (!output) {
+        std::cout << "Write Decompressed File Error\n";
+        return;
+    }
+
+    // traverse through Huffman Encoding and where a leaf node is reached, insert character
+    HuffmanNode* currentPtr{huffmanTreeRoot};
+    for (char bit : huffmanEncodingString) {
+        if (bit == '0') {
+            currentPtr = currentPtr->left;
+        } else if (bit == '1') {
+            currentPtr = currentPtr->right;
+        }
+
+        // when a leaf node is reached, write to file and reset to root
+        if (!currentPtr->left && !currentPtr->right) {
+            output.put(currentPtr->key.value());
+            currentPtr = huffmanTreeRoot;
+        }
+    }
+
+    output.close();
 }

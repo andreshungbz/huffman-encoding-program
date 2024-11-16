@@ -155,6 +155,9 @@ void HuffmanTree::decompress(const std::string& path) {
     readHuffmanTreeRepresentation(input);
     int position{0};
     huffmanTreeRoot = reconstructHuffmanTree(huffmanTreeRepresentation, position);
+
+    // read and instantiate Huffman Encoding String
+    readHuffmanEncoding(input);
 }
 
 // helper functions
@@ -378,6 +381,25 @@ void HuffmanTree::readHuffmanTreeRepresentation(std::ifstream& input) {
         }
     }
 }
+
+void HuffmanTree::readHuffmanEncoding(std::ifstream& input) {
+    huffmanEncodingString.clear();
+
+    // read the huffman encoding section of the input and instantiate huffmanEncodingString
+
+    int bytesCount{(static_cast<int>(huffmanFileHeader.huffmanEncodingLength) + 7) / 8};
+    for (int i{0}; i < bytesCount; ++i) { // this ensures file pointer ends after the padding
+        char byte{};
+        input.read(&byte, 1);
+
+        for (int j{0}; j < 8; ++j) {
+            if (i * 8 + j < huffmanFileHeader.huffmanEncodingLength) { // don't count padding bits
+                huffmanEncodingString += (byte & (1 << 7 - j)) ? '1' : '0';
+            }
+        }
+    }
+}
+
 
 HuffmanNode* HuffmanTree::reconstructHuffmanTree(const std::string& representation, int& position) {
     if (position >= representation.length()) {

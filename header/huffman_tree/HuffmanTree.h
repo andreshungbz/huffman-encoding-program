@@ -41,6 +41,11 @@ private:
     void generateEncodingTableHelper(const HuffmanNode* root, const std::string& code);
     void insertEncodedCharacter(char character);
     void generateHuffmanTreeRepresentationHelper(const HuffmanNode* root);
+
+    // compress helper functions
+    void writeHuffmanFileInfo(std::ofstream& output);
+    void writeHuffmanTreeRepresentation(std::ofstream& output);
+    void writeHuffmanEncoding(std::ofstream& output);
 };
 
 

@@ -9,26 +9,26 @@
 #include "utils/generate/generate_utils.h"
 #include "utils/compression/compression_utils.h"
 
-HuffmanTree::HuffmanTree(const std::string& path) {
+HuffmanTree::HuffmanTree(const std::string& source) {
     // open test file in binary mode to read file exactly as is stored
-    std::ifstream input{path, std::ios::in | std::ios::binary};
+    std::ifstream input{source, std::ios::in | std::ios::binary};
     // handle file open error
     if (!input.is_open()) {
         std::cout << "File Open Error\n";
         return;
     }
 
-    generate(input, path);
+    generate(input, source);
 
     input.close();
 }
 
-void HuffmanTree::generate(std::ifstream& input, const std::string& path) {
+void HuffmanTree::generate(std::ifstream& input, const std::string& source) {
     // get information about file and store in fileInformation
-    std::string directory = getDirectory(path);
-    std::string fileName = getFileName(path);
-    std::string fileExtension = getFileExtension(path);
-    std::size_t fileSize = getFileSize(path);
+    std::string directory = getDirectory(source);
+    std::string fileName = getFileName(source);
+    std::string fileExtension = getFileExtension(source);
+    std::size_t fileSize = getFileSize(source);
     fileInformation = FileInformation{fileName, fileExtension, fileSize, directory};
 
     // create frequency hash map with specified number of buckets
@@ -41,11 +41,11 @@ void HuffmanTree::generate(std::ifstream& input, const std::string& path) {
     huffmanTreeRoot = priorityQueue.getHuffmanTree();
 
     // generate other structures
-    generateEncodingTable(huffmanEncodingTable, huffmanTreeRoot);
-    generateEncodingString(input, huffmanEncodingTable, huffmanEncodingString);
+    generateEncodingTable(encodingTable, huffmanTreeRoot);
+    generateEncodingString(input, encodingTable, huffmanCode);
     generateHuffmanTreeRepresentation(huffmanTreeRepresentation, huffmanTreeRoot);
-    generateFileInfoEncoding(fileInformation, huffmanFileInfoEncoding);
-    generateHuffmanFileHeader(huffmanFileHeader, huffmanFileInfoEncoding.length(), huffmanTreeRepresentation.length(), huffmanEncodingString.length());
+    generateFileInfoEncoding(fileInformation, huffmanFileInfoCode);
+    generateHuffmanFileHeader(fileHeader, huffmanFileInfoCode.length(), huffmanTreeRepresentation.length(), huffmanCode.length());
 }
 
 void HuffmanTree::compress() const {
@@ -64,10 +64,10 @@ void HuffmanTree::compress() const {
     // 00100010 00000000 00000000 00000000 for 34
 
     // write Huffman File Header (always 12 bytes)
-    output.write(reinterpret_cast<const char*>(&huffmanFileHeader), sizeof(HuffmanFileHeader));
+    output.write(reinterpret_cast<const char*>(&fileHeader), sizeof(HuffmanHeader));
 
     // write Huffman File Information (always in byte (8-bit) chunks)
-    writeSection(output, huffmanFileInfoEncoding);
+    writeSection(output, huffmanFileInfoCode);
 
     // write Huffman Tree Representation (may have incomplete byte so pad the end with 0s)
     // for happy_hip_hop whose tree representation is 69 bits, padding count is 3
@@ -75,15 +75,15 @@ void HuffmanTree::compress() const {
 
     // write Huffman Encoding (may have incomplete byte so pad the end with 0s)
     // for happy_hip_hop whose encoding string is 34 bits, padding count is 6
-    writeSection(output, huffmanEncodingString);
+    writeSection(output, huffmanCode);
 
     // close file
     output.close();
 }
 
-void HuffmanTree::decompress(const std::string& path) {
+void HuffmanTree::decompress(const std::string& source) {
     // open test file in binary mode to read file exactly as is stored
-    std::ifstream input{path, std::ios::in | std::ios::binary};
+    std::ifstream input{source, std::ios::in | std::ios::binary};
     // handle file open error
     if (!input.is_open()) {
         std::cout << "Compressed File Open Error\n";
@@ -91,26 +91,26 @@ void HuffmanTree::decompress(const std::string& path) {
     }
 
     // read and instantiate Huffman File Header
-    input.read(reinterpret_cast<char*>(&huffmanFileHeader), sizeof(HuffmanFileHeader));
+    input.read(reinterpret_cast<char*>(&fileHeader), sizeof(HuffmanHeader));
 
     // read and instantiate Huffman File Info Encoding along with fileInformation.fileName and fileInformation.fileExtension
-    readSection(input, huffmanFileInfoEncoding, huffmanFileHeader.infoLength);
-    instantiateHuffmanFileInformation(fileInformation, huffmanFileInfoEncoding);
+    readSection(input, huffmanFileInfoCode, fileHeader.infoLength);
+    instantiateHuffmanFileInformation(fileInformation, huffmanFileInfoCode);
 
     // read and instantiate Huffman Tree Representation and build huffmanTreeRoot
-    readSection(input, huffmanTreeRepresentation, huffmanFileHeader.treeLength);
+    readSection(input, huffmanTreeRepresentation, fileHeader.treeLength);
     int position{0};
     huffmanTreeRoot = instantiateHuffmanTree(huffmanTreeRepresentation, position);
 
     // read and instantiate Huffman Encoding String
-    readSection(input, huffmanEncodingString, huffmanFileHeader.encodingLength);
+    readSection(input, huffmanCode, fileHeader.encodingLength);
 
     // construct original file path
-    std::string directory = getDirectory(path);
+    std::string directory = getDirectory(source);
     std::string decompressedFilePath = directory + '/' + fileInformation.fileName + "-decompressed" + fileInformation.fileExtension;
 
     // write decompressed file
-    writeDecompressedFile(decompressedFilePath, huffmanTreeRoot, huffmanEncodingString);
+    writeDecompressedFile(decompressedFilePath, huffmanTreeRoot, huffmanCode);
 
     input.close();
 }

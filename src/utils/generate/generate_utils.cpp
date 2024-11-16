@@ -110,7 +110,7 @@ void generateFileInfoEncoding(FileInformation& information, std::string& infoEnc
     }
 }
 
-void generateHuffmanFileHeader(HuffmanFileHeader& header, std::size_t iLength, std::size_t tLength, std::size_t eLength) {
+void generateHuffmanFileHeader(HuffmanHeader& header, std::size_t iLength, std::size_t tLength, std::size_t eLength) {
     header.infoLength = static_cast<uint32_t>(iLength);
     header.treeLength = static_cast<uint32_t>(tLength);
     header.encodingLength = static_cast<uint32_t>(eLength);

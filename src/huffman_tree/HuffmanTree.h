@@ -9,25 +9,27 @@
 
 #include "HuffmanNode.h"
 #include "huffman_tree/components/FileInformation.h"
-#include "huffman_tree/components/HuffmanFileHeader.h"
+#include "huffman_tree/components/HuffmanHeader.h"
 
 class HuffmanTree {
 public:
-    explicit HuffmanTree(const std::string& path);
+    explicit HuffmanTree(const std::string& source);
     HuffmanTree() = default;
 
-    void generate(std::ifstream& input, const std::string& path);
+    void generate(std::ifstream& input, const std::string& source);
     void compress() const;
-    void decompress(const std::string& path);
+    void decompress(const std::string& source);
 
 private:
     HuffmanNode* huffmanTreeRoot{nullptr};
-    std::unordered_map<std::optional<char>, std::string> huffmanEncodingTable{};
-    std::string huffmanEncodingString{};
-    std::string huffmanTreeRepresentation{};
-    std::string huffmanFileInfoEncoding{};
-    HuffmanFileHeader huffmanFileHeader{0, 0, 0};
     FileInformation fileInformation{"", "", 0, ""};
+    std::unordered_map<std::optional<char>, std::string> encodingTable{};
+
+    // data members which are written and read to file
+    HuffmanHeader fileHeader{0, 0, 0};
+    std::string huffmanFileInfoCode{};
+    std::string huffmanTreeRepresentation{};
+    std::string huffmanCode{};
 };
 
 

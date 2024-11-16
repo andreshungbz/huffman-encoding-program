@@ -1,15 +1,15 @@
 // Huffman File Header Implementation
 
-#ifndef HUFFMAN_FILE_HEADER_H
-#define HUFFMAN_FILE_HEADER_H
+#ifndef HUFFMAN_HEADER_H
+#define HUFFMAN_HEADER_H
 
 
 #include <cstdint>
 
-class HuffmanFileHeader {
+class HuffmanHeader {
 public:
     // constructor
-    HuffmanFileHeader(uint32_t iLength, uint32_t tLength, uint32_t eLength)
+    HuffmanHeader(uint32_t iLength, uint32_t tLength, uint32_t eLength)
         : infoLength(iLength), treeLength(tLength), encodingLength(eLength) {}
 
     // data members
@@ -19,4 +19,4 @@ public:
 };
 
 
-#endif // HUFFMAN_FILE_HEADER_H
+#endif // HUFFMAN_HEADER_H

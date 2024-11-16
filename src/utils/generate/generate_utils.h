@@ -7,7 +7,7 @@
 #include <unordered_map>
 
 #include "huffman_tree/components/FileInformation.h"
-#include "huffman_tree/components/HuffmanFileHeader.h"
+#include "huffman_tree/components/HuffmanHeader.h"
 #include "huffman_tree/HuffmanNode.h"
 
 void generateEncodingTable(std::unordered_map<std::optional<char>, std::string>& encodingTable, const HuffmanNode* root);
@@ -21,7 +21,7 @@ void generateHuffmanTreeRepresentationHelper(std::string& representation, const 
 
 void generateFileInfoEncoding(FileInformation& information, std::string& infoEncoding);
 
-void generateHuffmanFileHeader(HuffmanFileHeader& header, std::size_t iLength, std::size_t tLength, std::size_t eLength);
+void generateHuffmanFileHeader(HuffmanHeader& header, std::size_t iLength, std::size_t tLength, std::size_t eLength);
 
 
 #endif // GENERATE_UTILS_H

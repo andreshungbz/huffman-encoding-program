@@ -22,5 +22,24 @@ int main() {
 
     huffmanTree.compress();
 
+
+
+    std::string decompressPath{".."};
+
+    // create relative path for Windows and Unix/Linux
+    #if defined(_WIN32)
+        decompressPath += "\\test\\";
+    #else
+        decompressPath +="/test/";
+    #endif
+
+    // append word list file
+    decompressPath += "input.hzip";
+
+    // testing decompress
+    HuffmanTree decompressHuffmanTree{};
+
+    decompressHuffmanTree.decompress(decompressPath);
+
     return 0;
 }

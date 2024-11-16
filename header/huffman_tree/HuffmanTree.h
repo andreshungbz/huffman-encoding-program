@@ -16,6 +16,7 @@
 class HuffmanTree {
 public:
     explicit HuffmanTree(const std::string& path);
+    HuffmanTree() = default;
     void generateEncodingTable();
     void generateEncodingString(std::ifstream& input);
     void generateHuffmanTreeRepresentation();
@@ -23,6 +24,7 @@ public:
     void generateHuffmanFileHeader();
 
     void compress() const;
+    void decompress(const std::string& path);
 
 private:
     HuffmanNode* huffmanTreeRoot{nullptr};
@@ -46,6 +48,12 @@ private:
     void writeHuffmanFileInfo(std::ofstream& output) const;
     void writeHuffmanTreeRepresentation(std::ofstream& output) const;
     void writeHuffmanEncoding(std::ofstream& output) const;
+
+    // decompress helper functions
+    void readHuffmanFileInfo(std::ifstream& input);
+    void readHuffmanTreeRepresentation(std::ifstream& input);
+    void readHuffmanEncoding(std::ifstream& input);
+    static HuffmanNode* reconstructHuffmanTree(const std::string& representation, int& position);
 };
 
 

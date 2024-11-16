@@ -3,6 +3,8 @@
 
 #include "huffman_tree/HuffmanTree.h"
 #include "FileUtils.h"
+#include "priority_queue/PriorityQueue.h"
+#include "GenerateUtils.h"
 
 HuffmanTree::HuffmanTree(const std::string& path) {
     // open test file in binary mode to read file exactly as is stored
@@ -36,59 +38,11 @@ void HuffmanTree::generate(std::ifstream& input, const std::string& path) {
     huffmanTreeRoot = priorityQueue.getHuffmanTree();
 
     // generate other structures
-    generateEncodingTable();
-    generateEncodingString(input);
-    generateHuffmanTreeRepresentation();
-    generateFileInfoEncoding();
-    generateHuffmanFileHeader();
-}
-
-void HuffmanTree::generateEncodingTable() {
-    // clear encoding table
-    huffmanEncodingTable.clear();
-
-    generateEncodingTableHelper(huffmanTreeRoot, "");
-}
-
-void HuffmanTree::generateEncodingString(std::ifstream& input) {
-    // clear string and move file pointer back to beginning
-    huffmanEncodingString.clear();
-    input.clear(); // check if error state
-    input.seekg(0, std::ios::beg);
-
-    char character;
-    while (input.get(character)) {
-        insertEncodedCharacter(character);
-    }
-}
-
-void HuffmanTree::generateHuffmanTreeRepresentation() {
-    huffmanTreeRepresentation.clear();
-    generateHuffmanTreeRepresentationHelper(huffmanTreeRoot);
-}
-
-void HuffmanTree::generateFileInfoEncoding() {
-    for (char c : fileInformation.fileName) {
-        for (int i{7}; i >= 0; --i) {
-            bool result{static_cast<bool>((c >> i) & 1)};
-            huffmanFileInfoEncoding += result ? '1' : '0';
-        }
-    }
-
-    for (char c : fileInformation.fileExtension) {
-        for (int i{7}; i >= 0; --i) {
-            bool result{static_cast<bool>((c >> i) & 1)};
-            huffmanFileInfoEncoding += result ? '1' : '0';
-        }
-    }
-}
-
-void HuffmanTree::generateHuffmanFileHeader() {
-    uint32_t infoLength{static_cast<uint32_t>(huffmanFileInfoEncoding.length())};
-    uint32_t treeLength{static_cast<uint32_t>(huffmanTreeRepresentation.length())};
-    uint32_t encodingLength{static_cast<uint32_t>(huffmanEncodingString.length())};
-
-    huffmanFileHeader = HuffmanFileHeader{infoLength, treeLength, encodingLength};
+    generateEncodingTable(huffmanEncodingTable, huffmanTreeRoot);
+    generateEncodingString(input, huffmanEncodingTable, huffmanEncodingString);
+    generateHuffmanTreeRepresentation(huffmanTreeRepresentation, huffmanTreeRoot);
+    generateFileInfoEncoding(fileInformation, huffmanFileInfoEncoding);
+    generateHuffmanFileHeader(huffmanFileHeader, huffmanFileInfoEncoding.length(), huffmanTreeRepresentation.length(), huffmanEncodingString.length());
 }
 
 void HuffmanTree::compress() const {
@@ -156,74 +110,6 @@ void HuffmanTree::decompress(const std::string& path) {
     writeDecompressedFile(decompressedFilePath);
 
     input.close();
-}
-
-// helper functions
-
-void HuffmanTree::generateEncodingTableHelper(const HuffmanNode* root, const std::string& code) {
-    // base case: past leaf node nullptr
-    if (root == nullptr) {
-        return;
-    }
-
-    // add encoding for only leaf nodes
-    if (root->left == nullptr && root->right == nullptr) {
-        // special case: tree with only one node
-        if (code.empty()) {
-            huffmanEncodingTable[root->key] = "0";
-        } else {
-            huffmanEncodingTable[root->key] = code;
-        }
-
-        return; // short-circuit on successful addition
-    }
-
-    // for non-leaf nodes, recursively continue
-    // here is where the Huffman Coding algorithm comes into play with 0 going left and 1 going right
-    generateEncodingTableHelper(root->left, code + "0");
-    generateEncodingTableHelper(root->right, code + "1");
-}
-
-void HuffmanTree::insertEncodedCharacter(const char character) {
-    auto encoding{huffmanEncodingTable.find(character)};
-
-    if (encoding != huffmanEncodingTable.end()) {
-        huffmanEncodingString += encoding->second;
-    } else {
-        std::cout << "Character not found in encoding table.\n";
-    }
-}
-
-void HuffmanTree::generateHuffmanTreeRepresentationHelper(const HuffmanNode* root) {
-    // base case
-    if (root == nullptr) return;
-
-    // preorder traversal is used to record the tree representation
-
-    // if the key has a value, encode 0 and then the 8-bit representation (9 bits total)
-    if (root->key.has_value()) {
-        huffmanTreeRepresentation += '0';
-
-        // get the character value and loop through every bit from left to right.
-        // for example, 'h' has the ASCII representation of '01101000'.
-        // loop down from 7 to 0 inclusive, using the right-shift operator (>>) based on index
-        // and using the bitwise AND operator (&) to evaluate the moved bit.
-
-        // https://www.geeksforgeeks.org/cpp-bitwise-operators/
-
-        char character{root->key.value()};
-        for (int i{7}; i >= 0; --i) {
-            bool result{static_cast<bool>((character >> i) & 1)};
-            huffmanTreeRepresentation += result ? '1' : '0';
-        }
-    } else {
-        // leaf node
-        huffmanTreeRepresentation += '1';
-    }
-
-    // recursively continue
-    generateHuffmanTreeRepresentationHelper(root->left);
-    generateHuffmanTreeRepresentationHelper(root->right);
 }
 
 // compress helper function

@@ -9,7 +9,6 @@
 
 #include "HuffmanNode.h"
 #include "hash_map/FrequencyHashMap.h"
-#include "priority_queue/PriorityQueue.h"
 #include "FileInformation.h"
 #include "HuffmanFileHeader.h"
 
@@ -17,11 +16,6 @@ class HuffmanTree {
 public:
     explicit HuffmanTree(const std::string& path);
     HuffmanTree() = default;
-    void generateEncodingTable();
-    void generateEncodingString(std::ifstream& input);
-    void generateHuffmanTreeRepresentation();
-    void generateFileInfoEncoding();
-    void generateHuffmanFileHeader();
 
     void generate(std::ifstream& input, const std::string& path);
     void compress() const;
@@ -37,11 +31,6 @@ private:
 
     // file-related data members
     FileInformation fileInformation{"", "", 0, ""};
-
-    // helper functions
-    void generateEncodingTableHelper(const HuffmanNode* root, const std::string& code);
-    void insertEncodedCharacter(char character);
-    void generateHuffmanTreeRepresentationHelper(const HuffmanNode* root);
 
     // compress helper function
     static void writeSection(std::ofstream& output, const std::string& section);

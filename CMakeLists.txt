@@ -18,4 +18,6 @@ add_executable(02_huffman_encoding main.cpp
         header/FileUtils.h
         src/FileUtils.cpp
         header/HuffmanFileHeader.h
+        header/GenerateUtils.h
+        src/GenerateUtils.cpp
 )

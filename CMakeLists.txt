@@ -20,4 +20,6 @@ add_executable(02_huffman_encoding main.cpp
         header/HuffmanFileHeader.h
         header/GenerateUtils.h
         src/GenerateUtils.cpp
+        header/CompressionUtils.h
+        src/CompressionUtils.cpp
 )

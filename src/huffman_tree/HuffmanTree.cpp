@@ -5,6 +5,7 @@
 #include "FileUtils.h"
 #include "priority_queue/PriorityQueue.h"
 #include "GenerateUtils.h"
+#include "CompressionUtils.h"
 
 HuffmanTree::HuffmanTree(const std::string& path) {
     // open test file in binary mode to read file exactly as is stored
@@ -92,7 +93,7 @@ void HuffmanTree::decompress(const std::string& path) {
 
     // read and instantiate Huffman File Info Encoding along with fileInformation.fileName and fileInformation.fileExtension
     readSection(input, huffmanFileInfoEncoding, huffmanFileHeader.infoLength);
-    instantiateHuffmanFileInformation();
+    instantiateHuffmanFileInformation(fileInformation, huffmanFileInfoEncoding);
 
     // read and instantiate Huffman Tree Representation and build huffmanTreeRoot
     readSection(input, huffmanTreeRepresentation, huffmanFileHeader.treeLength);
@@ -107,138 +108,7 @@ void HuffmanTree::decompress(const std::string& path) {
     std::string decompressedFilePath = directory + '/' + fileInformation.fileName + "-decompressed" + fileInformation.fileExtension;
 
     // write decompressed file
-    writeDecompressedFile(decompressedFilePath);
+    writeDecompressedFile(decompressedFilePath, huffmanTreeRoot, huffmanEncodingString);
 
     input.close();
-}
-
-// compress helper function
-
-void HuffmanTree::writeSection(std::ofstream& output, const std::string& section) {
-    std::string string{section}; // copy over section string
-    // the calculation in parentheses gives us number of 0s to pad; extra % 8 ensures that
-    // if the string is already divisible by 8, then the padding becomes 0
-    std::size_t paddingCount{(8 - (section.length() % 8)) % 8};
-    string.append(paddingCount, '0'); // pad as necessary
-
-    // follow previous loop to write byte chunks
-    for (std::size_t i{0}; i < string.length(); i += 8) {
-        // construct the 8-bit byte chunk by setting the appropriate bit
-        // this time use the left shift operator (<<) to set the appropriate bit which gets set to byte
-        // via the bitwise OR operator (|)
-        int byte{0};
-        for (int j{0}; j < 8; ++j) {
-            if (string[i + j] == '1') {
-                // integer 1 represented as 00000001
-                byte |= (1 << (7 - j));
-            }
-        }
-
-        // write byte chunk into file
-        char charByte{static_cast<char>(byte)};
-        output.write(&charByte, 1);
-    }
-}
-
-// decompress helper functions
-
-void HuffmanTree::readSection(std::ifstream& input, std::string& section, uint32_t size) {
-    section.clear();
-
-    // read the section and instantiate the appropriate data member
-    int bytesCount{(static_cast<int>(size) + 7) / 8};
-    for (int i{0}; i < bytesCount; ++i) { // this ensures file pointer ends after the padding
-        char byte{};
-        input.read(&byte, 1);
-
-        for (int j{0}; j < 8; ++j) {
-            if (i * 8 + j < size) { // don't count padding bits
-                section += (byte & (1 << 7 - j)) ? '1' : '0';
-            }
-        }
-    }
-}
-
-void HuffmanTree::instantiateHuffmanFileInformation() {
-    // use huffmanFileInfoEncoding to instantiate fileInformation's fileName and fileExtension
-
-    bool isFileName{true};
-    for (size_t i = 0; i < huffmanFileInfoEncoding.length(); i += 8) {
-        // read byte
-        int byte{0};
-        for (size_t j = 0; j < 8; j++) {
-            if (huffmanFileInfoEncoding[i + j] == '1') {
-                byte |= (1 << (7 - j));
-            }
-        }
-
-        // check character
-        char character{static_cast<char>(byte)};
-
-        // when period is reached, change condition status so that fileExtension gets appended instead
-        if (character == '.') {
-            isFileName = false;
-        }
-
-        // append to fileName and fileExtension accordingly
-        if (isFileName) {
-            fileInformation.fileName += character;
-        } else {
-            fileInformation.fileExtension += character;
-        }
-    }
-}
-
-HuffmanNode* HuffmanTree::instantiateHuffmanTree(const std::string& representation, int& position) {
-    if (position >= representation.length()) {
-        return nullptr;
-    }
-
-    if (representation[position] == '0') {
-        // leaf node - next 8 bits represent the character
-        ++position;
-        int byte{0};
-        for (int i{0}; i < 8; ++i) {
-            if (representation[position + i] == '1') {
-                byte |= (1 << (7 - i));
-            }
-        }
-        position += 8;
-        return new HuffmanNode(static_cast<char>(byte), 0);  // Weight doesn't matter for decompression
-    }
-
-    // internal node
-    ++position;
-    auto* node = new HuffmanNode(0);  // Create internal node
-    node->left = instantiateHuffmanTree(representation, position);
-    node->right = instantiateHuffmanTree(representation, position);
-
-    return node;
-}
-
-void HuffmanTree::writeDecompressedFile(const std::string& path) {
-    std::ofstream output(path, std::ios::out | std::ios::binary);
-
-    if (!output) {
-        std::cout << "Write Decompressed File Error\n";
-        return;
-    }
-
-    // traverse through Huffman Encoding and where a leaf node is reached, insert character
-    HuffmanNode* currentPtr{huffmanTreeRoot};
-    for (char bit : huffmanEncodingString) {
-        if (bit == '0') {
-            currentPtr = currentPtr->left;
-        } else if (bit == '1') {
-            currentPtr = currentPtr->right;
-        }
-
-        // when a leaf node is reached, write to file and reset to root
-        if (!currentPtr->left && !currentPtr->right) {
-            output.put(currentPtr->key.value());
-            currentPtr = huffmanTreeRoot;
-        }
-    }
-
-    output.close();
 }

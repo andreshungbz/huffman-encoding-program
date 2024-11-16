@@ -28,19 +28,7 @@ private:
     std::string huffmanTreeRepresentation{};
     std::string huffmanFileInfoEncoding{};
     HuffmanFileHeader huffmanFileHeader{0, 0, 0};
-
-    // file-related data members
     FileInformation fileInformation{"", "", 0, ""};
-
-    // compress helper function
-    static void writeSection(std::ofstream& output, const std::string& section);
-
-    // decompress helper functions
-    static void readSection(std::ifstream& input, std::string& section, uint32_t size);
-    void instantiateHuffmanFileInformation();
-    static HuffmanNode* instantiateHuffmanTree(const std::string& representation, int& position);
-
-    void writeDecompressedFile(const std::string& path);
 };
 
 

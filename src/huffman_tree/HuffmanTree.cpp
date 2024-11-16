@@ -13,14 +13,18 @@ HuffmanTree::HuffmanTree(const std::string& path) {
         return;
     }
 
-    // get information about file
+    generate(input, path);
+
+    input.close();
+}
+
+void HuffmanTree::generate(std::ifstream& input, const std::string& path) {
+    // get information about file and store in fileInformation
     std::string directory = getDirectory(path);
     std::string fileName = getFileName(path);
     std::string fileExtension = getFileExtension(path);
     std::size_t fileSize = getFileSize(path);
-
-    // initialize members
-    fileInformation = FileInformation(fileName, fileExtension, fileSize, directory);
+    fileInformation = FileInformation{fileName, fileExtension, fileSize, directory};
 
     // create frequency hash map with specified number of buckets
     FrequencyHashMap hashMap{10};
@@ -47,9 +51,6 @@ HuffmanTree::HuffmanTree(const std::string& path) {
     generateHuffmanTreeRepresentation();
     generateFileInfoEncoding();
     generateHuffmanFileHeader();
-
-    // close file
-    input.close();
 }
 
 void HuffmanTree::generateEncodingTable() {

@@ -23,6 +23,7 @@ public:
     void generateFileInfoEncoding();
     void generateHuffmanFileHeader();
 
+    void generate(std::ifstream& input, const std::string& path);
     void compress() const;
     void decompress(const std::string& path);
 

@@ -119,15 +119,15 @@ void HuffmanTree::compress() const {
     output.write(reinterpret_cast<const char*>(&huffmanFileHeader), sizeof(HuffmanFileHeader));
 
     // write Huffman File Information (always in byte (8-bit) chunks)
-    writeHuffmanFileInfo(output);
+    writeSection(output, huffmanFileInfoEncoding);
 
     // write Huffman Tree Representation (may have incomplete byte so pad the end with 0s)
     // for happy_hip_hop whose tree representation is 69 bits, padding count is 3
-    writeHuffmanTreeRepresentation(output);
+    writeSection(output, huffmanTreeRepresentation);
 
     // write Huffman Encoding (may have incomplete byte so pad the end with 0s)
     // for happy_hip_hop whose encoding string is 34 bits, padding count is 6
-    writeHuffmanEncoding(output);
+    writeSection(output, huffmanEncodingString);
 
     // close file
     output.close();
@@ -252,72 +252,29 @@ void HuffmanTree::generateHuffmanTreeRepresentationHelper(const HuffmanNode* roo
     generateHuffmanTreeRepresentationHelper(root->right);
 }
 
-// compress helper functions
+// compress helper function
 
-void HuffmanTree::writeHuffmanFileInfo(std::ofstream& output) const {
-    // write Huffman File Information (always in byte (8-bit) chunks)
-    // the file name with extension will be visible in a hex editor
+void HuffmanTree::writeSection(std::ofstream& output, const std::string& section) {
+    std::string string{section}; // copy over section string
+    // the calculation in parentheses gives us number of 0s to pad; extra % 8 ensures that
+    // if the string is already divisible by 8, then the padding becomes 0
+    std::size_t paddingCount{(8 - (section.length() % 8)) % 8};
+    string.append(paddingCount, '0'); // pad as necessary
 
-    for (std::size_t i{0}; i < huffmanFileInfoEncoding.length(); i += 8) {
-        int byte{0};
+    // follow previous loop to write byte chunks
+    for (std::size_t i{0}; i < string.length(); i += 8) {
         // construct the 8-bit byte chunk by setting the appropriate bit
         // this time use the left shift operator (<<) to set the appropriate bit which gets set to byte
         // via the bitwise OR operator (|)
+        int byte{0};
         for (int j{0}; j < 8; ++j) {
-            if (huffmanFileInfoEncoding[i + j] == '1') {
+            if (string[i + j] == '1') {
                 // integer 1 represented as 00000001
                 byte |= (1 << (7 - j));
             }
         }
 
         // write byte chunk into file
-        char charByte{static_cast<char>(byte)};
-        output.write(&charByte, 1);
-    }
-}
-
-void HuffmanTree::writeHuffmanTreeRepresentation(std::ofstream& output) const {
-    // write Huffman Tree Representation (may have incomplete byte so pad the end with 0s)
-    // for happy_hip_hop whose tree representation is 69 bits, padding count is 3
-
-    std::string paddedTreeString{huffmanTreeRepresentation}; // copy over string
-    // the calculation in parentheses gives us number of 0s to pad; extra % 8 ensures that
-    // if the string is already divisible by 8, then the padCount becomes 0
-    std::size_t padCountTree{(8 - (huffmanTreeRepresentation.length() % 8)) % 8};
-    paddedTreeString.append(padCountTree, '0');
-
-    // follow previous loop to write byte chunks
-    for (std::size_t i{0}; i < paddedTreeString.length(); i += 8) {
-        int byte{0};
-        for (int j{0}; j < 8; ++j) {
-            if (paddedTreeString[i + j] == '1') {
-                byte |= (1 << (7 - j));
-            }
-        }
-
-        char charByte{static_cast<char>(byte)};
-        output.write(&charByte, 1);
-    }
-}
-
-void HuffmanTree::writeHuffmanEncoding(std::ofstream& output) const {
-    // write Huffman Encoding (may have incomplete byte so pad the end with 0s)
-    // follows same algorithm as writing huffmanTreeRepresentation
-    // for happy_hip_hop whose encoding string is 34 bits, padding count is 6
-
-    std::string paddedEncodingString{huffmanEncodingString};
-    std::size_t padCountEncoding{(8 - (huffmanEncodingString.length() % 8)) % 8};
-    paddedEncodingString.append(padCountEncoding, '0');
-
-    // follow previous loop to write byte chunks
-    for (std::size_t i{0}; i < paddedEncodingString.length(); i += 8) {
-        int byte{0};
-        for (int j{0}; j < 8; ++j) {
-            if (paddedEncodingString[i + j] == '1') {
-                byte |= (1 << (7 - j));
-            }
-        }
-
         char charByte{static_cast<char>(byte)};
         output.write(&charByte, 1);
     }

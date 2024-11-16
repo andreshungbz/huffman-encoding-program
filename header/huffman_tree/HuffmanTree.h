@@ -44,10 +44,8 @@ private:
     void insertEncodedCharacter(char character);
     void generateHuffmanTreeRepresentationHelper(const HuffmanNode* root);
 
-    // compress helper functions
-    void writeHuffmanFileInfo(std::ofstream& output) const;
-    void writeHuffmanTreeRepresentation(std::ofstream& output) const;
-    void writeHuffmanEncoding(std::ofstream& output) const;
+    // compress helper function
+    static void writeSection(std::ofstream& output, const std::string& section);
 
     // decompress helper functions
     void readHuffmanFileInfo(std::ifstream& input);

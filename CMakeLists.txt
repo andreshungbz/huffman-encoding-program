@@ -15,14 +15,14 @@ add_executable(02_huffman_encoding main.cpp
 
         src/huffman_tree/HuffmanNode.h
         src/huffman_tree/HuffmanTree.h
-        src/huffman_tree/FileInformation.h
-        src/huffman_tree/HuffmanFileHeader.h
+        src/huffman_tree/components/FileInformation.h
+        src/huffman_tree/components/HuffmanFileHeader.h
         src/huffman_tree/HuffmanTree.cpp
 
-        src/utils/FileUtils.h
-        src/utils/FileUtils.cpp
-        src/utils/GenerateUtils.h
-        src/utils/GenerateUtils.cpp
-        src/utils/CompressionUtils.h
-        src/utils/CompressionUtils.cpp
+        src/utils/file/file_utils.h
+        src/utils/file/file_utils.cpp
+        src/utils/generate/generate_utils.h
+        src/utils/generate/generate_utils.cpp
+        src/utils/compression/compression_utils.h
+        src/utils/compression/compression_utils.cpp
 )

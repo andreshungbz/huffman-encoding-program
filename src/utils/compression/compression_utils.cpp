@@ -1,4 +1,4 @@
-#include "CompressionUtils.h"
+#include "compression_utils.h"
 
 #include <iostream>
 

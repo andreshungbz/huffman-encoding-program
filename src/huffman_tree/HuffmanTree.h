@@ -8,9 +8,8 @@
 #include <unordered_map>
 
 #include "HuffmanNode.h"
-#include "hash_map/FrequencyHashMap.h"
-#include "FileInformation.h"
-#include "HuffmanFileHeader.h"
+#include "huffman_tree/components/FileInformation.h"
+#include "huffman_tree/components/HuffmanFileHeader.h"
 
 class HuffmanTree {
 public:

@@ -1,6 +1,6 @@
 // Frequency Hash Map Implementation
 
-#include "./hash_map/FrequencyHashMap.h"
+#include "FrequencyHashMap.h"
 
 FrequencyHashMap::FrequencyHashMap(std::ifstream& input, int bucketsCount) : buckets(bucketsCount) {
     input.clear(); // check if error state

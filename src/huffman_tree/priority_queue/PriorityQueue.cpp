@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include "priority_queue/PriorityQueue.h"
+#include "PriorityQueue.h"
 
 PriorityQueue::PriorityQueue(const FrequencyHashMap& hashMap) {
     for (FrequencyHashNode* tree : hashMap.buckets) {

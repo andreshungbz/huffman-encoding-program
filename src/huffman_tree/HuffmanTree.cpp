@@ -2,10 +2,11 @@
 #include <iostream>
 
 #include "huffman_tree/HuffmanTree.h"
-#include "FileUtils.h"
+
 #include "priority_queue/PriorityQueue.h"
-#include "GenerateUtils.h"
-#include "CompressionUtils.h"
+#include "utils/FileUtils.h"
+#include "utils/GenerateUtils.h"
+#include "utils/CompressionUtils.h"
 
 HuffmanTree::HuffmanTree(const std::string& path) {
     // open test file in binary mode to read file exactly as is stored

@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <fstream>
 
-#include "FileInformation.h"
+#include "huffman_tree/FileInformation.h"
 #include "huffman_tree/HuffmanNode.h"
 
 // compress helper function

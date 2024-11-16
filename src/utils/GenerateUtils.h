@@ -6,8 +6,8 @@
 #include <string>
 #include <unordered_map>
 
-#include "FileInformation.h"
-#include "HuffmanFileHeader.h"
+#include "huffman_tree/FileInformation.h"
+#include "huffman_tree/HuffmanFileHeader.h"
 #include "huffman_tree/HuffmanNode.h"
 
 void generateEncodingTable(std::unordered_map<std::optional<char>, std::string>& encodingTable, const HuffmanNode* root);

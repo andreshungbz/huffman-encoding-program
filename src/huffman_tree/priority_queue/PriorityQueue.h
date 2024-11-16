@@ -20,7 +20,7 @@
 
 #include <vector>
 
-#include "hash_map/FrequencyHashMap.h"
+#include "huffman_tree/hash_map/FrequencyHashMap.h"
 #include "huffman_tree/HuffmanNode.h"
 
 class PriorityQueue {

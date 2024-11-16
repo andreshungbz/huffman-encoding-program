@@ -100,7 +100,7 @@ void HuffmanTree::generateHuffmanFileHeader() {
     huffmanFileHeader = HuffmanFileHeader{infoLength, treeLength, encodingLength};
 }
 
-void HuffmanTree::compress() {
+void HuffmanTree::compress() const {
     std::string compressedFilePath{fileInformation.fileDirectory + "/" + fileInformation.fileName + ".hzip"};
     std::ofstream output{compressedFilePath,std::ios::out | std::ios::binary};
 
@@ -221,7 +221,7 @@ void HuffmanTree::generateHuffmanTreeRepresentationHelper(const HuffmanNode* roo
 
 // compress helper functions
 
-void HuffmanTree::writeHuffmanFileInfo(std::ofstream& output) {
+void HuffmanTree::writeHuffmanFileInfo(std::ofstream& output) const {
     // write Huffman File Information (always in byte (8-bit) chunks)
     // the file name with extension will be visible in a hex editor
 
@@ -243,7 +243,7 @@ void HuffmanTree::writeHuffmanFileInfo(std::ofstream& output) {
     }
 }
 
-void HuffmanTree::writeHuffmanTreeRepresentation(std::ofstream& output) {
+void HuffmanTree::writeHuffmanTreeRepresentation(std::ofstream& output) const {
     // write Huffman Tree Representation (may have incomplete byte so pad the end with 0s)
     // for happy_hip_hop whose tree representation is 69 bits, padding count is 3
 
@@ -267,7 +267,7 @@ void HuffmanTree::writeHuffmanTreeRepresentation(std::ofstream& output) {
     }
 }
 
-void HuffmanTree::writeHuffmanEncoding(std::ofstream& output) {
+void HuffmanTree::writeHuffmanEncoding(std::ofstream& output) const {
     // write Huffman Encoding (may have incomplete byte so pad the end with 0s)
     // follows same algorithm as writing huffmanTreeRepresentation
     // for happy_hip_hop whose encoding string is 34 bits, padding count is 6

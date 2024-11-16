@@ -22,7 +22,7 @@ public:
     void generateFileInfoEncoding();
     void generateHuffmanFileHeader();
 
-    void compress();
+    void compress() const;
 
 private:
     HuffmanNode* huffmanTreeRoot{nullptr};
@@ -43,9 +43,9 @@ private:
     void generateHuffmanTreeRepresentationHelper(const HuffmanNode* root);
 
     // compress helper functions
-    void writeHuffmanFileInfo(std::ofstream& output);
-    void writeHuffmanTreeRepresentation(std::ofstream& output);
-    void writeHuffmanEncoding(std::ofstream& output);
+    void writeHuffmanFileInfo(std::ofstream& output) const;
+    void writeHuffmanTreeRepresentation(std::ofstream& output) const;
+    void writeHuffmanEncoding(std::ofstream& output) const;
 };
 
 

@@ -20,26 +20,29 @@
 
 #include <vector>
 
+#include "hash_map/FrequencyHashMap.h"
 #include "huffman_tree/HuffmanNode.h"
 
 class PriorityQueue {
 public:
-    void enqueue(char key, int weight);
-    HuffmanNode* dequeue();
-    void enqueue(HuffmanNode* node); // overload function for constructHuffmanTree
-    void constructHuffmanTree(); // post-condition: single pointer in queue representing root of Huffman Tree
-    [[nodiscard]] HuffmanNode* getHuffmanTree() const { return queue[0]; } // called after construction of Huffman Tree
+    explicit PriorityQueue(const FrequencyHashMap& hashMap); // constructor
+    [[nodiscard]] HuffmanNode* getHuffmanTree() const { return queue[0]; } // getter called after construction of Huffman Tree
 private:
     std::vector<HuffmanNode*> queue{};
 
-    // these are helper functions not meant to be used outside the class, so they are private
-    // use implicit links to get appropriate indexes
+    // constructor helper functions
+    void traverseBST(const FrequencyHashNode* root);
+    void constructHuffmanTree(); // post-condition: single pointer in queue representing root of Huffman Tree
+
+    // heap functions
     static std::size_t getParent(std::size_t index) { return (index - 1) / 2; }
     static std::size_t getLeftChild(std::size_t index) { return (index * 2) + 1; }
     static std::size_t getRightChild(std::size_t index) { return (index * 2) + 2; }
-    // reHeap functions
     void reHeapUp(std::size_t endIndex);
     void reHeapDown(std::size_t startIndex, std::size_t endIndex);
+    void enqueue(char key, int weight);
+    void enqueue(HuffmanNode* node); // overload function for constructHuffmanTree
+    HuffmanNode* dequeue();
 };
 
 

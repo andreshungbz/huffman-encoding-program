@@ -4,6 +4,53 @@
 
 #include "priority_queue/PriorityQueue.h"
 
+PriorityQueue::PriorityQueue(const FrequencyHashMap& hashMap) {
+    for (FrequencyHashNode* tree : hashMap.buckets) {
+        traverseBST(tree);
+    }
+
+    // construct Huffman Tree
+    constructHuffmanTree();
+}
+
+// constructor helper functions
+
+void PriorityQueue::traverseBST(const FrequencyHashNode* root) {
+    // base case
+    if (root == nullptr) {
+        return;
+    }
+
+    // traverse inorder, going through every node and populating the queue
+    enqueue(root->key, root->frequency);
+    traverseBST(root->left);
+    traverseBST(root->right);
+}
+
+void PriorityQueue::constructHuffmanTree() {
+    // base case when only one pointer left in queue
+    if (queue.size() == 1) {
+        return;
+    }
+
+    // extract the two most minimum nodes from queue
+    HuffmanNode* minimumA{dequeue()};
+    HuffmanNode* minimumB{dequeue()};
+
+    // create a non-leaf HuffmanNode with the combined weights
+    HuffmanNode* newPtr{new HuffmanNode(minimumA->weight + minimumB->weight)};
+    newPtr->left = minimumA;
+    newPtr->right = minimumB;
+
+    // add new HuffmanNode back to queue
+    enqueue(newPtr);
+
+    // recursively continue
+    constructHuffmanTree();
+}
+
+// heap functions
+
 void PriorityQueue::reHeapUp(std::size_t endIndex) {
     if (endIndex > 0) {
         // base case is at root node
@@ -15,11 +62,6 @@ void PriorityQueue::reHeapUp(std::size_t endIndex) {
             reHeapUp(parentIndex);
         }
     }
-}
-
-void PriorityQueue::enqueue(char key, int weight) {
-    queue.push_back(new HuffmanNode(key, weight));
-    reHeapUp(queue.size() - 1);
 }
 
 void PriorityQueue::reHeapDown(std::size_t startIndex, std::size_t endIndex) {
@@ -48,6 +90,16 @@ void PriorityQueue::reHeapDown(std::size_t startIndex, std::size_t endIndex) {
     }
 }
 
+void PriorityQueue::enqueue(char key, int weight) {
+    queue.push_back(new HuffmanNode(key, weight));
+    reHeapUp(queue.size() - 1);
+}
+
+void PriorityQueue::enqueue(HuffmanNode* node) {
+    queue.push_back(node);
+    reHeapUp(queue.size() - 1);
+}
+
 HuffmanNode* PriorityQueue::dequeue() {
     // check if empty
     if (queue.empty()) {
@@ -62,31 +114,4 @@ HuffmanNode* PriorityQueue::dequeue() {
     reHeapDown(0, length == 0 ? 0 : length - 1);
 
     return dequeuedPtr;
-}
-
-void PriorityQueue::enqueue(HuffmanNode* node) {
-    queue.push_back(node);
-    reHeapUp(queue.size() - 1);
-}
-
-void PriorityQueue::constructHuffmanTree() {
-    // base case when only one pointer left in queue
-    if (queue.size() == 1) {
-        return;
-    }
-
-    // extract the two most minimum nodes from queue
-    HuffmanNode* minimumA{dequeue()};
-    HuffmanNode* minimumB{dequeue()};
-
-    // create a non-leaf HuffmanNode with the combined weights
-    HuffmanNode* newPtr{new HuffmanNode(minimumA->weight + minimumB->weight)};
-    newPtr->left = minimumA;
-    newPtr->right = minimumB;
-
-    // add new HuffmanNode back to queue
-    enqueue(newPtr);
-
-    // recursively continue
-    constructHuffmanTree();
 }

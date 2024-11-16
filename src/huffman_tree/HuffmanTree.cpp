@@ -29,15 +29,11 @@ void HuffmanTree::generate(std::ifstream& input, const std::string& path) {
     // create frequency hash map with specified number of buckets
     FrequencyHashMap hashMap{input, 10};
 
-    // create priority queue
-    PriorityQueue queue{};
-    // populate queue with every key in hash map
-    populateQueue(queue, hashMap);
+    // create priority queue and populate with every key in hash map
+    PriorityQueue priorityQueue{hashMap};
 
-    // construct Huffman Tree
-    queue.constructHuffmanTree();
     // assign constructed Huffman Tree to this object's root
-    huffmanTreeRoot = queue.getHuffmanTree();
+    huffmanTreeRoot = priorityQueue.getHuffmanTree();
 
     // generate other structures
     generateEncodingTable();
@@ -163,24 +159,6 @@ void HuffmanTree::decompress(const std::string& path) {
 }
 
 // helper functions
-
-void HuffmanTree::traverseBST(PriorityQueue& queue, const FrequencyHashNode* root) {
-    // base case
-    if (root == nullptr) {
-        return;
-    }
-
-    // traverse inorder, going through every node and populating the queue
-    queue.enqueue(root->key, root->frequency);
-    traverseBST(queue, root->left);
-    traverseBST(queue, root->right);
-}
-
-void HuffmanTree::populateQueue(PriorityQueue& queue, const FrequencyHashMap& hashMap) {
-    for (FrequencyHashNode* tree : hashMap.buckets) {
-        traverseBST(queue, tree);
-    }
-}
 
 void HuffmanTree::generateEncodingTableHelper(const HuffmanNode* root, const std::string& code) {
     // base case: past leaf node nullptr

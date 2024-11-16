@@ -128,6 +128,9 @@ void HuffmanTree::compress() {
     // write Huffman Encoding (may have incomplete byte so pad the end with 0s)
     // for happy_hip_hop whose encoding string is 34 bits, padding count is 6
     writeHuffmanEncoding(output);
+
+    // close file
+    output.close();
 }
 
 // helper functions

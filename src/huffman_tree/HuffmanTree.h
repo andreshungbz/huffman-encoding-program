@@ -52,10 +52,6 @@
 // convenience. Two separate classes are utilized to group related data members: FileInformation and HuffmanHeader,
 // which correspond to sections 2 and 1 of the written file respectively.
 
-// When a compressed file is read, only the necessary data members are instantiated such that the original file can
-// be recreated. For example, the encodingTable will be empty, as well as the size and directory data members of
-// fileInformation.
-
 #ifndef HUFFMAN_TREE_H
 #define HUFFMAN_TREE_H
 

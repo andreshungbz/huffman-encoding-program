@@ -73,7 +73,7 @@ public:
     HuffmanTree() = default; // default constructor used when creating an empty object from which to decompress
 
     // main functions, they are in order of the program loop
-    void generate(std::ifstream& input, const std::string& source);
+    void generate(std::ifstream& input);
     void compress(const std::string& destination) const;
     void decompress(std::ifstream& input, const std::string& destination);
     void instantiate();

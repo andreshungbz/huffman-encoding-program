@@ -18,10 +18,10 @@ HuffmanTree::HuffmanTree(std::ifstream& input, const std::string& source) {
     fileInformation = FileInformation{fileName, fileExtension};
 
     // construct all data members
-    generate(input, source);
+    generate(input);
 }
 
-void HuffmanTree::generate(std::ifstream& input, const std::string& source) {
+void HuffmanTree::generate(std::ifstream& input) {
     // build Huffman Tree
     FrequencyHashMap hashMap{input, 10}; // hash map of frequencies of each character
     PriorityQueue priorityQueue{hashMap}; // min-heap priority queue where the lowest weight is accessed first

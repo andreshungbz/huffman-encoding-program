@@ -30,15 +30,31 @@
 
 // Third is the Tree Representation section. To represent the tree, the following algorithm is used: traverse the
 // tree in a preorder manner and for every non-leaf node (with no value), record a 1; for every leaf node (which has
-// a value), record a 0 then the 8-bit representation of node's value. Because this section can result in a count
-// of bits not divisible by 8 (as computers typically read), padding of 0s may be added at the end.
+// a value), record a 0 then the 8-bit representation of node's value. Weight is not needed in the reconstruction of
+// the Huffman Tree, therefore it is not stored. Because this section can result in a count of bits not divisible by 8
+// (as computers typically read), padding of 0s may be added at the end.
 
 // Last is the Huffman Code section. This section may also have a padding of 0s at the end due to possible count of
 // bits not divisible by 8.
 
 /* Program Loop */
 
+// This implementation has 4 main functions, represented in the public methods in this class.
 
+// 1) generate takes a path to a file and constructs the Huffman Tree and other necessary data members.
+// 2) compress writes the file according to the 4 sections above.
+// 3) decompress reads a compressed file according to the 4 sections above.
+// 4) instantiate reconstructs the Huffman Tree, from which the original file can then be recreated.
+
+/* Other Implementation Notes */
+
+// The encoding table used to create the Huffman Code utilizes a hash map. The C++ STL unordered_map is used for
+// convenience. Two separate classes are utilized to group related data members: FileInformation and HuffmanHeader,
+// which correspond to sections 2 and 1 of the written file respectively.
+
+// When a compressed file is read, only the necessary data members are instantiated such that the original file can
+// be recreated. For example, the encodingTable will be empty, as well as the size and directory data members of
+// fileInformation.
 
 #ifndef HUFFMAN_TREE_H
 #define HUFFMAN_TREE_H

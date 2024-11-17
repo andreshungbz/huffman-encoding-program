@@ -6,29 +6,44 @@
 // 01000101 00000000 00000000 00000000 for 69
 // 00100010 00000000 00000000 00000000 for 34
 
+#include <fstream>
+#include <iostream>
 #include <string>
 
 #include "huffman_tree/HuffmanTree.h"
+#include "utils/file/file_utils.h"
 
 int main() {
     // define slash delimiter for Windows and Unix/Linux
 #if defined(_WIN32)
-    char slash = "\\";
+    std::string slash = "\\";
 #else
     std::string slash = "/";
 #endif
 
     std::string path{".." + slash + "test" + slash + "input.txt"};
+    std::ifstream input{path, std::ios::in | std::ios::binary}; // read in binary mode
+    if (!input) {
+        std::cout << "File Open Error\n";
+        return 1;
+    }
+
+    std::string directory{getDirectory(path)};
 
     // testing compress
-    HuffmanTree huffmanTree{path};
-    huffmanTree.compress();
+    HuffmanTree huffmanTree{input, path};
+    huffmanTree.compress(directory);
 
     std::string dPath{".." + slash + "test" + slash + "input.hzip"};
+    std::ifstream input2{dPath, std::ios::in | std::ios::binary}; // read in binary mode
+    if (!input2) {
+        std::cout << "Compressed File Open Error\n";
+        return 2;
+    }
 
     // testing decompress
     HuffmanTree decompressHuffmanTree{};
-    decompressHuffmanTree.decompress(dPath);
+    decompressHuffmanTree.decompress(input2, directory);
 
     return 0;
 }

@@ -13,15 +13,12 @@
 class FileInformation {
 public:
     // constructor
-    FileInformation(std::string name, std::string extension, const std::size_t size, std::string directory)
-    : fileName(std::move(name)), fileExtension(std::move(extension))
-    , fileSize(size), fileDirectory(std::move(directory)) {}
+    FileInformation(std::string name, std::string extension)
+    : fileName(std::move(name)), fileExtension(std::move(extension)) {}
 
     // public data members
     std::string fileName{};
     std::string fileExtension{};
-    std::size_t fileSize{};
-    std::string fileDirectory{};
 };
 
 

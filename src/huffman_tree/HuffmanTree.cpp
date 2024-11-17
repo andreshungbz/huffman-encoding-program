@@ -11,12 +11,11 @@
 #include "utils/compression/compression_utils.h"
 #include "utils/instantiate/instantiate_utils.h"
 
-HuffmanTree::HuffmanTree(const std::string& source) {
-    std::ifstream input{source, std::ios::in | std::ios::binary}; // read in binary mode
-    if (!input) {
-        std::cout << "File Open Error\n";
-        return;
-    }
+HuffmanTree::HuffmanTree(std::ifstream& input, const std::string& source) {
+    // get information about file and store in fileInformation
+    std::string fileName = getFileName(source);
+    std::string fileExtension = getFileExtension(source);
+    fileInformation = FileInformation{fileName, fileExtension};
 
     // construct all data members
     generate(input, source);
@@ -25,13 +24,6 @@ HuffmanTree::HuffmanTree(const std::string& source) {
 }
 
 void HuffmanTree::generate(std::ifstream& input, const std::string& source) {
-    // get information about file and store in fileInformation
-    std::string directory = getDirectory(source);
-    std::string fileName = getFileName(source);
-    std::string fileExtension = getFileExtension(source);
-    std::size_t fileSize = getFileSize(source);
-    fileInformation = FileInformation{fileName, fileExtension, fileSize, directory};
-
     // build Huffman Tree
     FrequencyHashMap hashMap{input, 10}; // hash map of frequencies of each character
     PriorityQueue priorityQueue{hashMap}; // min-heap priority queue where the lowest weight is accessed first
@@ -49,7 +41,7 @@ void HuffmanTree::generate(std::ifstream& input, const std::string& source) {
                           huffmanCode.length());
 }
 
-void HuffmanTree::compress() const {
+void HuffmanTree::compress(const std::string& destination) const {
     // construct file path such that the compressed file is in the same directory as the original file
     // uses the .hzip extension which is an unused extension
 
@@ -59,19 +51,13 @@ void HuffmanTree::compress() const {
     char slash = '/';
 #endif
 
-    std::string compressedFilePath{fileInformation.fileDirectory + slash + fileInformation.fileName + ".hzip"};
+    std::string compressedFilePath{destination + slash + fileInformation.fileName + ".hzip"};
 
     // write compressed file
     writeCompressedFile(compressedFilePath, huffmanHeader, huffmanFileInfoCode, huffmanTreeRepresentation, huffmanCode);
 }
 
-void HuffmanTree::decompress(const std::string& source) {
-    std::ifstream input{source, std::ios::in | std::ios::binary}; // read in binary mode
-    if (!input) {
-        std::cout << "Compressed File Open Error\n";
-        return;
-    }
-
+void HuffmanTree::decompress(std::ifstream& input, const std::string& destination) {
     // read each section in the file and instantiate appropriate data members
     input.read(reinterpret_cast<char*>(&huffmanHeader), sizeof(HuffmanHeader)); // always 12 bytes
     readSection(input, huffmanFileInfoCode, huffmanHeader.infoLength); // always in byte chunks
@@ -92,7 +78,7 @@ void HuffmanTree::decompress(const std::string& source) {
     char slash = '/';
 #endif
 
-    std::string decompressedFilePath = getDirectory(source) + slash + fileInformation.fileName + "-decompressed" +
+    std::string decompressedFilePath = destination + slash + fileInformation.fileName + "-decompressed" +
         fileInformation.fileExtension;
 
     // write decompressed file

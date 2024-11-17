@@ -34,6 +34,8 @@ int main() {
     HuffmanTree huffmanTree{input, path};
     huffmanTree.compress(directory);
 
+    input.close();
+
     std::string dPath{".." + slash + "test" + slash + "input.hzip"};
     std::ifstream input2{dPath, std::ios::in | std::ios::binary}; // read in binary mode
     if (!input2) {
@@ -44,6 +46,8 @@ int main() {
     // testing decompress
     HuffmanTree decompressHuffmanTree{};
     decompressHuffmanTree.decompress(input2, directory);
+
+    input2.close();
 
     return 0;
 }

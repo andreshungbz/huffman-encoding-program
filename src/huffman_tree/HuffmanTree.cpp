@@ -19,8 +19,6 @@ HuffmanTree::HuffmanTree(std::ifstream& input, const std::string& source) {
 
     // construct all data members
     generate(input, source);
-
-    input.close();
 }
 
 void HuffmanTree::generate(std::ifstream& input, const std::string& source) {
@@ -63,8 +61,6 @@ void HuffmanTree::decompress(std::ifstream& input, const std::string& destinatio
     readSection(input, huffmanFileInfoCode, huffmanHeader.infoLength); // always in byte chunks
     readSection(input, huffmanTreeRepresentation, huffmanHeader.treeLength); // may have padding at the end
     readSection(input, huffmanCode, huffmanHeader.encodingLength); // may have padding at the end
-
-    input.close();
 
     // reconstruct file name, file extension, and build Huffman Tree
     instantiate();

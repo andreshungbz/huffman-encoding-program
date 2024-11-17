@@ -21,6 +21,8 @@ int main() {
     std::string slash = "/";
 #endif
 
+    // COMPRESSION
+
     std::string path{".." + slash + "test" + slash + "input.txt"};
     std::ifstream input{path, std::ios::in | std::ios::binary}; // read in binary mode
     if (!input) {
@@ -28,6 +30,7 @@ int main() {
         return 1;
     }
 
+    // RETRIEVE DIRECTORY
     std::string directory{getDirectory(path)};
 
     // testing compress
@@ -35,6 +38,9 @@ int main() {
     huffmanTree.compress(directory);
 
     input.close();
+
+
+    // DECOMPRESSION
 
     std::string dPath{".." + slash + "test" + slash + "input.hzip"};
     std::ifstream input2{dPath, std::ios::in | std::ios::binary}; // read in binary mode
@@ -48,6 +54,10 @@ int main() {
     decompressHuffmanTree.decompress(input2, directory);
 
     input2.close();
+
+    // COMPARE ORIGINAL AND COMPRESSED SIZES
+    std::size_t originalSize{getFileSize(path)};
+    std::size_t compressedSize{getFileSize(dPath)};
 
     return 0;
 }

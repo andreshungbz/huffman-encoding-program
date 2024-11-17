@@ -11,41 +11,24 @@
 #include "huffman_tree/HuffmanTree.h"
 
 int main() {
-    std::string path{".."};
+    // define slash delimiter for Windows and Unix/Linux
+#if defined(_WIN32)
+    char slash = "\\";
+#else
+    std::string slash = "/";
+#endif
 
-    // create relative path for Windows and Unix/Linux
-    #if defined(_WIN32)
-        path += "\\test\\";
-    #else
-        path +="/test/";
-    #endif
+    std::string path{".." + slash + "test" + slash + "input.txt"};
 
-    // append word list file
-    path += "input.txt";
-
-    // create Huffman Tree
+    // testing compress
     HuffmanTree huffmanTree{path};
-
     huffmanTree.compress();
 
-
-
-    std::string decompressPath{".."};
-
-    // create relative path for Windows and Unix/Linux
-    #if defined(_WIN32)
-        decompressPath += "\\test\\";
-    #else
-        decompressPath +="/test/";
-    #endif
-
-    // append word list file
-    decompressPath += "input.hzip";
+    std::string dPath{".." + slash + "test" + slash + "input.hzip"};
 
     // testing decompress
     HuffmanTree decompressHuffmanTree{};
-
-    decompressHuffmanTree.decompress(decompressPath);
+    decompressHuffmanTree.decompress(dPath);
 
     return 0;
 }

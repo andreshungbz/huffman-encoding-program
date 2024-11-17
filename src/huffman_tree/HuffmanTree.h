@@ -61,7 +61,6 @@
 
 
 #include <string>
-#include <unordered_map>
 
 #include "HuffmanNode.h"
 #include "huffman_tree/components/FileInformation.h"
@@ -83,9 +82,6 @@ private:
     // instantiated data members
     HuffmanNode* huffmanTreeRoot{nullptr};
     FileInformation fileInformation{"", "", 0, ""};
-
-    // used for compressing, empty when decompressed
-    std::unordered_map<std::optional<char>, std::string> encodingTable{};
 
     // data members which are written and read to file
     HuffmanHeader huffmanHeader{0, 0, 0};

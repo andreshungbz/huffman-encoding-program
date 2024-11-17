@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <unordered_map>
 
 #include "priority_queue/PriorityQueue.h"
 
@@ -36,11 +37,14 @@ void HuffmanTree::generate(std::ifstream& input, const std::string& source) {
     PriorityQueue priorityQueue{hashMap}; // min-heap priority queue where the lowest weight is accessed first
     huffmanTreeRoot = priorityQueue.getHuffmanTree(); // pass the constructed Huffman Tree in the priority queue
 
-    // generate necessary data members needed for compressing
-    generateFileInfoCode(fileInformation, huffmanFileInfoCode);
+    // generate encoding table
+    std::unordered_map<std::optional<char>, std::string> encodingTable{};
     generateEncodingTable(encodingTable, huffmanTreeRoot);
-    generateHuffmanCode(input, encodingTable, huffmanCode);
+    // generate each section
+    generateFileInfoCode(fileInformation, huffmanFileInfoCode);
     generateHuffmanTreeRepresentation(huffmanTreeRepresentation, huffmanTreeRoot);
+    generateHuffmanCode(input, encodingTable, huffmanCode);
+    // generate the header from each section
     generateHuffmanHeader(huffmanHeader, huffmanFileInfoCode.length(), huffmanTreeRepresentation.length(),
                           huffmanCode.length());
 }

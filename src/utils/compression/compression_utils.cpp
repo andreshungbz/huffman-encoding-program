@@ -62,8 +62,8 @@ void readSection(std::ifstream& input, std::string& section, uint32_t size) {
         input.read(&byte, 1);
 
         for (int j{0}; j < 8; ++j) {
-            if (i * 8 + j < size) { // don't count padding bits
-                section += (byte & (1 << 7 - j)) ? '1' : '0';
+            if (i * 8 + j < static_cast<int>(size)) { // don't count padding bits
+                section += (byte & (1 << (7 - j))) ? '1' : '0';
             }
         }
     }

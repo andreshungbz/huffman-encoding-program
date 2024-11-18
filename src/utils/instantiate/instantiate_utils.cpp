@@ -6,18 +6,7 @@ void instantiateFileInformation(FileInformation& information, const std::string&
     // use huffmanFileInfoEncoding to instantiate fileInformation's fileName and fileExtension
 
     bool isFileName{true};
-    for (size_t i = 0; i < infoEncoding.length(); i += 8) {
-        // read byte
-        int byte{0};
-        for (size_t j = 0; j < 8; j++) {
-            if (infoEncoding[i + j] == '1') {
-                byte |= (1 << (7 - j));
-            }
-        }
-
-        // check character
-        char character{static_cast<char>(byte)};
-
+    for (char character : infoEncoding) {
         // when period is reached, change condition status so that fileExtension gets appended instead
         if (character == '.') {
             isFileName = false;

@@ -61,6 +61,8 @@ void compress() {
 
     // print compression result
     printCompressionResult(compressedFilePath, originalSize, compressedSize);
+
+    input.close();
 }
 
 void decompress() {
@@ -97,6 +99,8 @@ void decompress() {
 
     // print compression result
     printCompressionResult(decompressedFilePath, decompressedSize, compressedSize);
+
+    input.close();
 }
 
 void displayAbout() {

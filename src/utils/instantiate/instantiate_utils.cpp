@@ -34,7 +34,7 @@ void instantiateFileInformation(FileInformation& information, const std::string&
 
 HuffmanNode* instantiateHuffmanTree(const std::string& representation, int& position) {
     // base case: position is past the boundary
-    if (position >= representation.length()) {
+    if (position >= static_cast<int>(representation.length())) {
         return nullptr;
     }
 

@@ -66,6 +66,14 @@ void readSection(std::ifstream& input, std::string& section, uint32_t size) {
     }
 }
 
+void readCompressedFile(std::ifstream& input, HuffmanHeader& header, std::string& information, std::string& representation, std::string& encoding) {
+    // read each section in the file and instantiate appropriate data members
+    input.read(reinterpret_cast<char*>(&header), sizeof(HuffmanHeader)); // always 12 bytes
+    readSection(input, information, header.infoLength); // always in byte chunks
+    readSection(input, representation, header.treeLength); // may have padding at the end
+    readSection(input, encoding, header.encodingLength); // may have padding at the end
+}
+
 void writeDecompressedFile(const std::string& destination, HuffmanNode* root, const std::string& encodingString) {
     std::ofstream output(destination, std::ios::out | std::ios::binary);
 

@@ -14,6 +14,7 @@ void writeCompressedFile(const std::string& destination, const HuffmanHeader& he
 
 // decompress helper functions
 void readSection(std::ifstream& input, std::string& section, uint32_t size);
+void readCompressedFile(std::ifstream& input, HuffmanHeader& header, std::string& information, std::string& representation, std::string& encoding);
 void writeDecompressedFile(const std::string& destination, HuffmanNode* root, const std::string& encodingString);
 
 

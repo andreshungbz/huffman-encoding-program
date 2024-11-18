@@ -36,8 +36,8 @@ int main() {
     std::string fileExtension{getFileExtension(path)};
 
     // testing compress
-    HuffmanTree huffmanTree{input, fileName, fileExtension};
-    huffmanTree.compress(directory);
+    HuffmanTree huffmanTree{input, fileName, fileExtension, directory};
+    huffmanTree.compress(input, directory);
 
     input.close();
 

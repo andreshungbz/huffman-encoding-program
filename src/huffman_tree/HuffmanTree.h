@@ -18,13 +18,13 @@
 // In this implementation, a total is of 4 sections is written to file in the following order and read later in the
 // same order. Each section is elaborated on subsequently.
 
-// [Header] > [File Information] > [Tree Representation] > [Huffman Code]
+// [Header] > [File Information Code] > [Tree Representation] > [Huffman Code]
 
 // First is a Header section containing three 32-bit unsigned integer values
 // corresponding to the true byte lengths of the other three sections. Other strategies for section delimiting
-// include tagging and using special character sequences but a header section is more convenient.
+// include tagging and using special character sequences, but a header section is more convenient.
 
-// Second is the File Information section which is simply the ASCII byte sequence for the file name and extension
+// Second is the File Information Code section which is simply the ASCII byte sequence for the file name and extension
 // inclusive of the period. This can be seen using a hex dump tool such as xxd on Linux/macOS. This section will
 // always be in byte chunks so no padding is necessary.
 
@@ -37,20 +37,23 @@
 // Last is the Huffman Code section. This section may also have a padding of 0s at the end due to possible count of
 // bits not divisible by 8.
 
-/* Program Loop */
+/* Main Program Loop */
 
-// This implementation has 4 main functions, represented in the public methods in this class.
+// When compressing a file, the constructor with parameters is called. details in fileInformation and the Huffman Tree
+// is created. Afterward, compress is called, which generates the rest of data members (using generate) and writes
+// those data members to file.
 
-// 1) generate takes a path to a file and constructs the Huffman Tree and other necessary data members.
-// 2) compress writes the file according to the 4 sections above.
-// 3) decompress reads a compressed file according to the 4 sections above.
-// 4) instantiate reconstructs the Huffman Tree, from which the original file can then be recreated.
+// When decompressing a file, the default constructor is called to instantiate an initial object. The decompress
+// function is then manually called, which first reads from the compressed file to populate data members, and then
+// instantiates fileInformation and the Huffman Tree. Lastly, written to file is the original file.
 
 /* Other Implementation Notes */
 
-// The encoding table used to create the Huffman Code utilizes a hash map. The C++ STL unordered_map is used for
-// convenience. Two separate classes are utilized to group related data members: FileInformation and HuffmanHeader,
-// which correspond to sections 2 and 1 of the written file respectively.
+// The unused .hzip extension is used for the compressed file, and when decompressed, the original file name is appended
+// with "-decompressed".
+
+// The Header and File Information Code sections are sectioned into auxiliary classes, HuffmanHeader and FileInformation
+// respectively.
 
 #ifndef HUFFMAN_TREE_H
 #define HUFFMAN_TREE_H
@@ -65,13 +68,15 @@
 class HuffmanTree {
 public:
     // constructors
-    explicit HuffmanTree(std::ifstream& input, const std::string& name, const std::string& extension); // used when creating an instance from which to compress
-    HuffmanTree() = default; // default constructor used when creating an empty object from which to decompress
+    HuffmanTree(std::ifstream& input, const std::string& name, const std::string& extension, const std::string& destination);
+    HuffmanTree() = default;
 
     // main program loop public functions
-    void compress(const std::string& destination) const; // SECOND
-    void decompress(std::ifstream& input, const std::string& destination); // THIRD
 
+    // calls generate, writes compressed file
+    void compress(std::ifstream& input, const std::string& destination);
+    // reads from compressed file, calls instantiate, writes uncompressed file
+    void decompress(std::ifstream& input, const std::string& destination);
 
 private:
     // instantiated data members
@@ -85,8 +90,8 @@ private:
     std::string huffmanCode{};
 
     // main program loop private functions
-    void generate(std::ifstream& input); // FIRST
-    void instantiate(); // FOURTH
+    void generate(std::ifstream& input);
+    void instantiate();
 };
 
 

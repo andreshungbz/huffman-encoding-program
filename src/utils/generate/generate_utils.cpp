@@ -1,15 +1,17 @@
+// Generate Utilities Implementation
+
 #include "generate_utils.h"
 
 #include <iostream>
 
-void generateEncodingTable(std::unordered_map<std::optional<char>, std::string>& encodingTable, const HuffmanNode* root) {
-    // clear encoding table
-    encodingTable.clear();
+// generate encoding table
 
+void generateEncodingTable(EncodingTable& encodingTable, const HuffmanNode* root) {
+    encodingTable.clear();
     generateEncodingTableHelper(encodingTable, root, "");
 }
 
-void generateEncodingTableHelper(std::unordered_map<std::optional<char>, std::string>& encodingTable, const HuffmanNode* root, const std::string& code) {
+void generateEncodingTableHelper(EncodingTable& encodingTable, const HuffmanNode* root, const std::string& code) {
     // base case: past leaf node nullptr
     if (root == nullptr) {
         return;
@@ -33,27 +35,29 @@ void generateEncodingTableHelper(std::unordered_map<std::optional<char>, std::st
     generateEncodingTableHelper(encodingTable, root->right, code + "1");
 }
 
-void generateHuffmanCode(std::ifstream& input, const std::unordered_map<std::optional<char>, std::string>& encodingTable, std::string& encodingString) {
-    // clear string and move file pointer back to beginning
-    encodingString.clear();
-    input.clear(); // check if error state
-    input.seekg(0, std::ios::beg);
+// generate file information code
 
-    char character;
-    while (input.get(character)) {
-        insertEncodedCharacter(encodingTable, encodingString, character);
+void generateFileInfoCode(FileInformation& information, std::string& infoEncoding) {
+    infoEncoding.clear();
+
+    // encode file name
+    for (char c : information.fileName) {
+        for (int i{7}; i >= 0; --i) {
+            bool result{static_cast<bool>((c >> i) & 1)};
+            infoEncoding += result ? '1' : '0';
+        }
+    }
+
+    // encode file extension
+    for (char c : information.fileExtension) {
+        for (int i{7}; i >= 0; --i) {
+            bool result{static_cast<bool>((c >> i) & 1)};
+            infoEncoding += result ? '1' : '0';
+        }
     }
 }
 
-void insertEncodedCharacter(const std::unordered_map<std::optional<char>, std::string>& encodingTable, std::string& encodingString, const char character) {
-    auto encoding{encodingTable.find(character)};
-
-    if (encoding != encodingTable.end()) {
-        encodingString += encoding->second;
-    } else {
-        std::cout << "Character not found in encoding table.\n";
-    }
-}
+// generate tree representation
 
 void generateHuffmanTreeRepresentation(std::string& representation, const HuffmanNode* root) {
     representation.clear();
@@ -83,7 +87,7 @@ void generateHuffmanTreeRepresentationHelper(std::string& representation, const 
             representation += result ? '1' : '0';
         }
     } else {
-        // leaf node
+        // non-leaf node
         representation += '1';
     }
 
@@ -92,23 +96,27 @@ void generateHuffmanTreeRepresentationHelper(std::string& representation, const 
     generateHuffmanTreeRepresentationHelper(representation, root->right);
 }
 
-void generateFileInfoCode(FileInformation& information, std::string& infoEncoding) {
-    infoEncoding.clear();
+// generate huffman code
 
-    for (char c : information.fileName) {
-        for (int i{7}; i >= 0; --i) {
-            bool result{static_cast<bool>((c >> i) & 1)};
-            infoEncoding += result ? '1' : '0';
-        }
-    }
+void generateHuffmanCode(std::ifstream& input, const EncodingTable& encodingTable, std::string& encodingString) {
+    // clear string and move file pointer back to beginning
+    encodingString.clear();
+    input.clear(); // check if error state
+    input.seekg(0, std::ios::beg);
 
-    for (char c : information.fileExtension) {
-        for (int i{7}; i >= 0; --i) {
-            bool result{static_cast<bool>((c >> i) & 1)};
-            infoEncoding += result ? '1' : '0';
+    char character;
+    while (input.get(character)) {
+        auto encoding{encodingTable.find(character)};
+
+        if (encoding != encodingTable.end()) {
+            encodingString += encoding->second; // this has the Huffman Code for the single character
+        } else {
+            std::cout << "Character not found in encoding table.\n";
         }
     }
 }
+
+// generate huffman header
 
 void generateHuffmanHeader(HuffmanHeader& header, std::size_t iLength, std::size_t tLength, std::size_t eLength) {
     header.infoLength = static_cast<uint32_t>(iLength);

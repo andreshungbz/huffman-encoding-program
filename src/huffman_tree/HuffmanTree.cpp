@@ -11,7 +11,8 @@
 #include "utils/compression/compression_utils.h"
 #include "utils/instantiate/instantiate_utils.h"
 
-HuffmanTree::HuffmanTree(std::ifstream& input, const std::string& name, const std::string& extension, const std::string& destination) {
+HuffmanTree::HuffmanTree(std::ifstream& input, const std::string& name, const std::string& extension,
+                         const std::string& destination) {
     // create fileInformation
     fileInformation = FileInformation{name, extension};
 

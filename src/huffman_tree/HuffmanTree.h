@@ -72,10 +72,7 @@ public:
     HuffmanTree() = default;
 
     // main program loop public functions
-
-    // calls generate, writes compressed file
     void compress(std::ifstream& input, const std::string& destination);
-    // reads from compressed file, calls instantiate, writes uncompressed file
     void decompress(std::ifstream& input, const std::string& destination);
 
 private:

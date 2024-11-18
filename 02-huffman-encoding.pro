@@ -1,23 +1,31 @@
 TEMPLATE = app
 CONFIG += console c++17
-CONFIG -= app_bundle
 
 SOURCES += main.cpp \
-    src/hash_map/FrequencyHashMap.cpp \
-    src/priority_queue/PriorityQueue.cpp \
+    driver/driver.cpp \
+    src/huffman_tree/hash_map/FrequencyHashMap.cpp \
+    src/huffman_tree/priority_queue/PriorityQueue.cpp \
     src/huffman_tree/HuffmanTree.cpp \
-    src/FileUtils.cpp
+    src/utils/file/file_utils.cpp \
+    src/utils/generate/generate_utils.cpp \
+    src/utils/compression/compression_utils.cpp \
+    src/utils/instantiate/instantiate_utils.cpp
 
-HEADERS += header/hash_map/FrequencyHashNode.h \
-    header/hash_map/FrequencyHashMap.h \
-    header/priority_queue/PriorityQueue.h \
-    header/huffman_tree/HuffmanNode.h \
-    header/huffman_tree/HuffmanTree.h \
-    header/FileInformation.h \
-    header/FileUtils.h
+HEADERS += driver/driver.h \
+    src/huffman_tree/hash_map/FrequencyHashNode.h \
+    src/huffman_tree/hash_map/FrequencyHashMap.h \
+    src/huffman_tree/priority_queue/PriorityQueue.h \
+    src/huffman_tree/HuffmanNode.h \
+    src/huffman_tree/HuffmanTree.h \
+    src/huffman_tree/components/FileInformation.h \
+    src/huffman_tree/components/HuffmanHeader.h \
+    src/utils/file/file_utils.h \
+    src/utils/generate/generate_utils.h \
+    src/utils/compression/compression_utils.h \
+    src/utils/instantiate/instantiate_utils.h
 
-INCLUDEPATH += header \
-    src
+INCLUDEPATH += src \
+    driver
 
 # Unix/Linux build folders
 unix {

@@ -1,3 +1,5 @@
+// Compression Utilities Implementation
+
 #include "compression_utils.h"
 
 #include <iostream>
@@ -30,9 +32,9 @@ void writeSection(std::ofstream& output, const std::string& section) {
     }
 }
 
-void writeCompressedFile(const std::string& destination, const HuffmanHeader& header, const std::string& information, const std::string& representation, const std::string& encoding) {
-    std::ofstream output{destination,std::ios::out | std::ios::binary};
-
+void writeCompressedFile(const std::string& destination, const HuffmanHeader& header, const std::string& information,
+                         const std::string& representation, const std::string& encoding) {
+    std::ofstream output{destination, std::ios::out | std::ios::binary}; // write in binary mode
     if (!output) {
         std::cout << "File Write Error\n";
         return;
@@ -54,7 +56,8 @@ void readSection(std::ifstream& input, std::string& section, uint32_t size) {
 
     // read the section and instantiate the appropriate data member
     int bytesCount{(static_cast<int>(size) + 7) / 8};
-    for (int i{0}; i < bytesCount; ++i) { // this ensures file pointer ends after the padding
+    for (int i{0}; i < bytesCount; ++i) {
+        // this ensures file pointer ends after the padding
         char byte{};
         input.read(&byte, 1);
 
@@ -66,7 +69,8 @@ void readSection(std::ifstream& input, std::string& section, uint32_t size) {
     }
 }
 
-void readCompressedFile(std::ifstream& input, HuffmanHeader& header, std::string& information, std::string& representation, std::string& encoding) {
+void readCompressedFile(std::ifstream& input, HuffmanHeader& header, std::string& information,
+                        std::string& representation, std::string& encoding) {
     // read each section in the file and instantiate appropriate data members
     input.read(reinterpret_cast<char*>(&header), sizeof(HuffmanHeader)); // always 12 bytes
     readSection(input, information, header.infoLength); // always in byte chunks
@@ -75,8 +79,7 @@ void readCompressedFile(std::ifstream& input, HuffmanHeader& header, std::string
 }
 
 void writeDecompressedFile(const std::string& destination, HuffmanNode* root, const std::string& encodingString) {
-    std::ofstream output(destination, std::ios::out | std::ios::binary);
-
+    std::ofstream output(destination, std::ios::out | std::ios::binary); // write in binary mode
     if (!output) {
         std::cout << "Write Decompressed File Error\n";
         return;

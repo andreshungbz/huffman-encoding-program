@@ -6,16 +6,12 @@
 
 #include "priority_queue/PriorityQueue.h"
 
-#include "utils/file/file_utils.h"
 #include "utils/generate/generate_utils.h"
 #include "utils/compression/compression_utils.h"
 #include "utils/instantiate/instantiate_utils.h"
 
-HuffmanTree::HuffmanTree(std::ifstream& input, const std::string& source) {
-    // get information about file and store in fileInformation
-    std::string fileName = getFileName(source);
-    std::string fileExtension = getFileExtension(source);
-    fileInformation = FileInformation{fileName, fileExtension};
+HuffmanTree::HuffmanTree(std::ifstream& input, const std::string& name, const std::string& extension) {
+    fileInformation = FileInformation{name, extension};
 
     // construct all data members
     generate(input);

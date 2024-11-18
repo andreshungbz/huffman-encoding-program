@@ -30,11 +30,13 @@ int main() {
         return 1;
     }
 
-    // RETRIEVE DIRECTORY
+    // RETRIEVE DIRECTORY + FILE NAME + FILE EXTENSION
     std::string directory{getDirectory(path)};
+    std::string fileName{getFileName(path)};
+    std::string fileExtension{getFileExtension(path)};
 
     // testing compress
-    HuffmanTree huffmanTree{input, path};
+    HuffmanTree huffmanTree{input, fileName, fileExtension};
     huffmanTree.compress(directory);
 
     input.close();

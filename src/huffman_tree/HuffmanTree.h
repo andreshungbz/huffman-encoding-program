@@ -65,7 +65,7 @@
 class HuffmanTree {
 public:
     // constructors
-    explicit HuffmanTree(std::ifstream& input, const std::string& source); // used when creating an instance from which to compress
+    explicit HuffmanTree(std::ifstream& input, const std::string& name, const std::string& extension); // used when creating an instance from which to compress
     HuffmanTree() = default; // default constructor used when creating an empty object from which to decompress
 
     // main functions, they are in order of the program loop

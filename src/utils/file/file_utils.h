@@ -9,6 +9,8 @@
 // Preprocessor directives are used to manage this code, with use of __has_defined to check for <filesystem> and
 // _WIN32 to check for compilation on Windows systems.
 
+// These utilities can process both relative and absolute file paths.
+
 #ifndef FILE_UTILS_H
 #define FILE_UTILS_H
 

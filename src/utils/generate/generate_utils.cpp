@@ -39,7 +39,22 @@ void generateEncodingTableHelper(EncodingTable& encodingTable, const HuffmanNode
 
 void generateFileInfoCode(FileInformation& information, std::string& infoEncoding) {
     infoEncoding.clear();
-    infoEncoding = information.fileName + information.fileExtension;
+
+    // encode file name
+    for (char c : information.fileName) {
+        for (int i{7}; i >= 0; --i) {
+            bool result{static_cast<bool>((c >> i) & 1)};
+            infoEncoding += result ? '1' : '0';
+        }
+    }
+
+    // encode file extension
+    for (char c : information.fileExtension) {
+        for (int i{7}; i >= 0; --i) {
+            bool result{static_cast<bool>((c >> i) & 1)};
+            infoEncoding += result ? '1' : '0';
+        }
+    }
 }
 
 // generate tree representation

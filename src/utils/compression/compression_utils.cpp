@@ -42,7 +42,7 @@ void writeCompressedFile(const std::string& destination, const HuffmanHeader& he
 
     // write to file each section
     output.write(reinterpret_cast<const char*>(&header), sizeof(HuffmanHeader)); // always 12 bytes
-    output.write(reinterpret_cast<const char*>(&information), static_cast<std::streamsize>(information.length()));
+    writeSection(output, information); // always in byte chunks
     writeSection(output, representation); // may have padding at the end
     writeSection(output, encoding); // may have padding at the end
 
@@ -73,7 +73,7 @@ void readCompressedFile(std::ifstream& input, HuffmanHeader& header, std::string
                         std::string& representation, std::string& encoding) {
     // read each section in the file and instantiate appropriate data members
     input.read(reinterpret_cast<char*>(&header), sizeof(HuffmanHeader)); // always 12 bytes
-    input.read(reinterpret_cast<char*>(&information), header.infoLength);
+    readSection(input, information, header.infoLength); // always in byte chunks
     readSection(input, representation, header.treeLength); // may have padding at the end
     readSection(input, encoding, header.encodingLength); // may have padding at the end
 }

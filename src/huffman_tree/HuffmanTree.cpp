@@ -25,7 +25,7 @@ HuffmanTree::HuffmanTree(std::ifstream& input, const std::string& name, const st
     compress(input, destination);
 }
 
-void HuffmanTree::compress(std::ifstream& input, const std::string& destination) {
+std::string HuffmanTree::compress(std::ifstream& input, const std::string& destination) {
     // generate data members
     generate(input);
 
@@ -38,6 +38,8 @@ void HuffmanTree::compress(std::ifstream& input, const std::string& destination)
     // write the compressed file
     std::string compressedFilePath{destination + slash + fileInformation.fileName + ".hzip"};
     writeCompressedFile(compressedFilePath, huffmanHeader, huffmanFileInfoCode, huffmanTreeRepresentation, huffmanCode);
+
+    return compressedFilePath;
 }
 
 void HuffmanTree::generate(std::ifstream& input) {
@@ -55,7 +57,7 @@ void HuffmanTree::generate(std::ifstream& input) {
                           huffmanCode.length());
 }
 
-void HuffmanTree::decompress(std::ifstream& input, const std::string& destination) {
+std::string HuffmanTree::decompress(std::ifstream& input, const std::string& destination) {
     // read and instantiate huffmanHeader, huffmanFileInfoCode, huffmanTreeRepresentation, and huffmanCode.
     readCompressedFile(input, huffmanHeader, huffmanFileInfoCode, huffmanTreeRepresentation, huffmanCode);
 
@@ -73,6 +75,8 @@ void HuffmanTree::decompress(std::ifstream& input, const std::string& destinatio
         fileInformation.fileExtension;
     // write decompressed file
     writeDecompressedFile(decompressedFilePath, huffmanTreeRoot, huffmanCode);
+
+    return decompressedFilePath;
 }
 
 void HuffmanTree::instantiate() {

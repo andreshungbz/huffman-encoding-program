@@ -72,8 +72,8 @@ public:
     HuffmanTree() = default;
 
     // main program loop public functions
-    void compress(std::ifstream& input, const std::string& destination);
-    void decompress(std::ifstream& input, const std::string& destination);
+    std::string compress(std::ifstream& input, const std::string& destination);
+    std::string decompress(std::ifstream& input, const std::string& destination);
 
 private:
     // instantiated data members

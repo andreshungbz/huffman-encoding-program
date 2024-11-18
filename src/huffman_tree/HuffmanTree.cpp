@@ -11,25 +11,28 @@
 #include "utils/instantiate/instantiate_utils.h"
 
 HuffmanTree::HuffmanTree(std::ifstream& input, const std::string& name, const std::string& extension) {
+    // create fileInformation
     fileInformation = FileInformation{name, extension};
+
+    // build Huffman Tree
+    FrequencyHashMap hashMap{input, 10}; // hash map of frequencies of each character
+    PriorityQueue priorityQueue{hashMap}; // min-heap priority queue where the lowest weight is accessed first
+    huffmanTreeRoot = priorityQueue.getHuffmanTree(); // pass the constructed Huffman Tree in the priority queue
 
     // construct all data members
     generate(input);
 }
 
 void HuffmanTree::generate(std::ifstream& input) {
-    // build Huffman Tree
-    FrequencyHashMap hashMap{input, 10}; // hash map of frequencies of each character
-    PriorityQueue priorityQueue{hashMap}; // min-heap priority queue where the lowest weight is accessed first
-    huffmanTreeRoot = priorityQueue.getHuffmanTree(); // pass the constructed Huffman Tree in the priority queue
-
     // generate encoding table
     std::unordered_map<std::optional<char>, std::string> encodingTable{};
     generateEncodingTable(encodingTable, huffmanTreeRoot);
+
     // generate each section
     generateFileInfoCode(fileInformation, huffmanFileInfoCode);
     generateHuffmanTreeRepresentation(huffmanTreeRepresentation, huffmanTreeRoot);
     generateHuffmanCode(input, encodingTable, huffmanCode);
+
     // generate the header from each section
     generateHuffmanHeader(huffmanHeader, huffmanFileInfoCode.length(), huffmanTreeRepresentation.length(),
                           huffmanCode.length());

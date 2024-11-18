@@ -68,11 +68,10 @@ public:
     explicit HuffmanTree(std::ifstream& input, const std::string& name, const std::string& extension); // used when creating an instance from which to compress
     HuffmanTree() = default; // default constructor used when creating an empty object from which to decompress
 
-    // main functions, they are in order of the program loop
-    void generate(std::ifstream& input);
-    void compress(const std::string& destination) const;
-    void decompress(std::ifstream& input, const std::string& destination);
-    void instantiate();
+    // main program loop public functions
+    void compress(const std::string& destination) const; // SECOND
+    void decompress(std::ifstream& input, const std::string& destination); // THIRD
+
 
 private:
     // instantiated data members
@@ -84,6 +83,10 @@ private:
     std::string huffmanFileInfoCode{};
     std::string huffmanTreeRepresentation{};
     std::string huffmanCode{};
+
+    // main program loop private functions
+    void generate(std::ifstream& input); // FIRST
+    void instantiate(); // FOURTH
 };
 
 

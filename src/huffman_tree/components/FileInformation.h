@@ -1,7 +1,8 @@
 // File Information Header and Implementation
 
 // This class consolidates information about the processed file and provides a simple constructor for
-// instantiating an object.
+// instantiating an object. The data members written to file will be the byte size of the ASCII representation
+// of the file name and file extension inclusive of the period.
 
 #ifndef FILE_INFORMATION_H
 #define FILE_INFORMATION_H

@@ -1,3 +1,5 @@
+// Instantiate Utilities Implementation
+
 #include "instantiate_utils.h"
 
 void instantiateFileInformation(FileInformation& information, const std::string& infoEncoding) {
@@ -31,10 +33,12 @@ void instantiateFileInformation(FileInformation& information, const std::string&
 }
 
 HuffmanNode* instantiateHuffmanTree(const std::string& representation, int& position) {
+    // base case: position is past the boundary
     if (position >= representation.length()) {
         return nullptr;
     }
 
+    // leaf node
     if (representation[position] == '0') {
         // leaf node - next 8 bits represent the character
         ++position;
@@ -45,12 +49,12 @@ HuffmanNode* instantiateHuffmanTree(const std::string& representation, int& posi
             }
         }
         position += 8;
-        return new HuffmanNode(static_cast<char>(byte), 0);  // Weight doesn't matter for decompression
+        return new HuffmanNode(static_cast<char>(byte), 0);
     }
 
     // internal node
     ++position;
-    auto* node = new HuffmanNode(0);  // Create internal node
+    auto* node = new HuffmanNode(0); // Create internal node
     node->left = instantiateHuffmanTree(representation, position);
     node->right = instantiateHuffmanTree(representation, position);
 

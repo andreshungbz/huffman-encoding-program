@@ -108,7 +108,7 @@ void displayAbout() {
 
     std::cout << "[About Huffman Encoding Compression Program]\n";
     std::cout << std::left << std::setw(24) << "[About Algorithm]" << "https://web.stanford.edu/class/archive/cs/cs106b/cs106b.1234/resources/huffman.html\n";
-    std::cout << std::left << std::setw(24) << "[Source Code]" << "https://github.com/andreshungbz/CMPS2131/tree/main/final-project/02-huffman-encoding\n";
+    std::cout << std::left << std::setw(24) << "[Source Code]" << "https://github.com/andreshungbz/huffman-encoding-program\n";
     std::cout << std::left << std::setw(24) << "[Code Author]" << "Andres Hung\n";
     std::cout << std::left << std::setw(24) << "[Contact]" << "2018118240@ub.edu.bz or andres.hung@outlook.com\n";
     std::cout << std::left << std::setw(24) << "[Course]" << "[CMPS2131] Data Structures @ University of Belize\n";

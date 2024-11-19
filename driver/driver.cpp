@@ -177,7 +177,7 @@ void printCompressionResult(const std::string& path, int oSize, int cSize) {
     double compressionPercentage{((max - min) / oSize * 100) * (negative ? -1 : 1)};
 
     // message snippet
-    std::string message{negative ? "(size increase [!])" : "(size decrease ✅)"};
+    std::string message{negative ? "(size increase [not good])" : "(size decrease [good])"};
 
     std::cout << std::endl;
 

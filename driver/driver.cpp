@@ -175,9 +175,10 @@ void printCompressionResult(const std::string& path, int oSize, int cSize) {
     double max{std::max(static_cast<double>(oSize), static_cast<double>(cSize))};
     double min{std::min(static_cast<double>(oSize), static_cast<double>(cSize))};
     double compressionPercentage{((max - min) / oSize * 100) * (negative ? -1 : 1)};
+    double percentToOriginal{100 - compressionPercentage};
 
     // message snippet
-    std::string message{negative ? "(size increase [not good])" : "(size decrease [good])"};
+    std::string status{negative ? "[NOT OK]" : "[OK]"};
 
     std::cout << std::endl;
 
@@ -186,5 +187,5 @@ void printCompressionResult(const std::string& path, int oSize, int cSize) {
     std::cout << std::left << std::setw(20) << "[Original Size] " << oSize << " bytes\n";
     std::cout << std::left << std::setw(20) << "[Compressed Size] " << cSize << " bytes\n";
     std::cout << std::left << std::setw(20) << "[Compression %] " << std::fixed << std::setprecision(2)
-        << compressionPercentage << "% " + message + '\n';
+        << percentToOriginal << "% of original size " << status << '\n';
 }

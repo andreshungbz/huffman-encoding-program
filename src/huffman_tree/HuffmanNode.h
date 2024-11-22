@@ -15,13 +15,14 @@
 
 class HuffmanNode {
 public:
+    // constructors
+    HuffmanNode(char keyValue, int weightValue) : key(keyValue), weight(weightValue) {} // for priority queue
+    explicit HuffmanNode(int weightValue) : weight(weightValue) {} // for building Huffman Tree
+    // public data members
     std::optional<char> key{std::nullopt};
     int weight{};
     HuffmanNode* left{nullptr};
     HuffmanNode* right{nullptr};
-    // constructors
-    HuffmanNode(char keyValue, int weightValue) : key(keyValue), weight(weightValue) {} // for priority queue
-    explicit HuffmanNode(int weightValue) : weight(weightValue) {} // for building Huffman Tree
 };
 
 

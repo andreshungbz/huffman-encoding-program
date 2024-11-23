@@ -21,7 +21,7 @@ void PriorityQueue::traverseBST(const FrequencyHashNode* root) {
         return;
     }
 
-    // traverse inorder, going through every node and populating the queue
+    // traverse preorder, going through every node and populating the queue
     enqueue(root->key, root->frequency);
     traverseBST(root->left);
     traverseBST(root->right);
